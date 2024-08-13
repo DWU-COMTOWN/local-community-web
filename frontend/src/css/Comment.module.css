@@ -1,0 +1,185 @@
+.parent {
+  border: 1px solid #ced4da;
+  border-top: none;
+  padding: 10px;
+}
+
+.reply {
+  border: 1px solid #ced4da;
+  padding: 10px;
+  background-color: #f8f9fa;
+  margin-left: 30px;
+  margin-right: -10px;
+  border-right: none;
+}
+
+/* 두 번째부터 .reply 요소에는 border-top을 없앱니다 */
+.reply + .reply {
+  border-top: none;
+}
+.img {
+  width: 3vh;
+  height: 3vh;
+  object-fit: cover;
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+
+.status {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.status li {
+  color: grey;
+  display: flex;
+  align-items: center; /* 세로축 가운데 정렬 */
+  justify-content: center; /* 가로축 가운데 정렬 */
+  margin: 0px 10px 10px 10px;
+}
+
+.likeImg {
+  width: 2.5vh;
+  height: 2.5vh;
+  margin-right: 5px;
+}
+
+.commentInfo,
+.replyInfo {
+  display: flex;
+  align-items: center;
+}
+
+.replyBtn {
+  all: unset;
+  cursor: pointer;
+}
+
+.option {
+  display: flex;
+  list-style: none;
+  color: grey;
+  margin-left: auto;
+}
+
+.option li {
+  margin-left: 10px;
+}
+
+.commentStatus {
+  display: flex;
+  list-style: none;
+  color: grey;
+  justify-content: flex-end;
+}
+
+.commentStatus li {
+  margin-right: 10px;
+  display: inline-block;
+}
+.commentName {
+  font-weight: 1000;
+  font-size: 15px;
+}
+.commenteDate {
+  padding-left: 10px;
+  color: grey;
+  font-size: 14px;
+}
+.isEdited {
+  padding-left: 5px;
+  color: grey;
+  font-size: 14px;
+}
+
+.content {
+  margin: 10px;
+}
+
+.writeComment {
+  display: flex;
+  align-items: center; /* 세로로 가운데 정렬 */
+  border: 1px solid #ced4da;
+  border-top: none;
+  padding: 5px;
+  margin-bottom: 0;
+}
+
+a {
+  text-decoration: none; /* 링크의 밑줄 제거 */
+  color: inherit; /* 링크의 색상 제거 */
+}
+
+.commentOption {
+  margin: 0;
+}
+
+.commentText {
+  flex: 1;
+  padding: 10px;
+  margin-right: 5px;
+  border: none;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.writeReply {
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  border: 1px solid #ced4da;
+  border-right: none;
+  margin: 5px -10px 0px 30px;
+  /*위 오른쪽 아래 왼쪽*/
+  background-color: #f8f9fa;
+  padding: 5px;
+}
+.replyText {
+  flex: 1;
+  margin-right: 10px;
+  border: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.submit {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  color: grey;
+}
+
+.editComment {
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  border: 1px solid #ced4da;
+  border-right: none;
+  margin: 5px -10px 0px 30px;
+  /*위 오른쪽 아래 왼쪽*/
+  background-color: #f8f9fa;
+  padding: 5px;
+}
+
+.editText {
+  flex: 1;
+  margin-right: 10px;
+  border: none;
+  box-sizing: border-box;
+  font-size: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.editBtn {
+  padding: 8px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  color: grey;
+}

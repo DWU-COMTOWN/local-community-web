@@ -1,0 +1,38 @@
+export const myPostData = [
+  {
+    id: 1,
+    board: "자유",
+    title: "title1",
+    content: "지갑 주웠습니다! 잃어버리신 분 댓글 주세요",
+    date: "2024-01-01",
+    commentCount: 4,
+    likes: 7,
+  },
+  {
+    id: 2,
+    board: "정보",
+    title: "~~마트 ~월 ~일까지 빅세일",
+    content: "~~마트 오늘부터 세일입니다.",
+    date: "2024-02-14",
+    commentCount: 3,
+    likes: 1,
+  },
+  {
+    id: 3,
+    board: "소식",
+    title: "가입인사",
+    content: "안녕하세요",
+    date: "2024-04-01",
+    commentCount: 6,
+    likes: 12,
+  },
+  {
+    id: 4,
+    board: "리뷰",
+    title: "00식당 맛있어요",
+    content: "제 단골집이에요 추천!!",
+    date: "2024-05-05",
+    commentCount: 0,
+    likes: 0,
+  },
+];

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="96cbbfcb-02bb-4b1a-9a60-622d3cf48267" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../../.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/BestBoard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/LeftMenu.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/MainBoard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/MainMenu.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/MainPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/MainTitle.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/page/style.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/logo192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/logo512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../public/robots.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/App.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/Router.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/main/BestBoard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/main/LeftMenu.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/main/MainBoard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/main/MainMenu.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/main/MainTitle.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/my/Header.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/my/Sidebar.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/my/SidebarData.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/components/user/PostCode.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Comment.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Login.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/MyInfo.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Post.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Posts.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/SignUp.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/css/Write.module.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/data/myPostData.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/data/userData.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/image/ban1.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/image/ban2.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/image/ban3.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/image/dog.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/image/profile.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/main/MainPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/my/Bookmark.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/my/MyComment.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/my/MyInfo.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/my/MyPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/my/MyPost.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/commentItem.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/edit.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/post.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/postItem.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/posts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/post/write.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/user/Login.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/pages/user/SignUp.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/reportWebVitals.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/setProxy.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../src/setupTests.js" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2jXYKFU53hpwTfPxHwkxuM8gMtT" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/comtown/local-community-web/foundation/src/main/frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-22-openjdk-22-4caba194b151-f504ca98" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="96cbbfcb-02bb-4b1a-9a60-622d3cf48267" name="Changes" comment="" />
+      <created>1721534822696</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1721534822696</updated>
+      <workItem from="1721534823752" duration="271000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

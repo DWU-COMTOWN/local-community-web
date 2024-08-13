@@ -1,0 +1,93 @@
+.page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 20px;
+  margin-top: -25%;
+
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleWrap {
+  margin-top: 90px;
+  font-size: 30px;
+  font-weight: 500;
+  color: #454545;
+  cursor: default;
+}
+
+.contentWrap {
+  margin-top: 20px;
+}
+
+.inputWrap {
+  display: flex;
+  width: 300px;
+  border-radius: 0;
+  padding: 15px;
+  margin-top: 8px;
+  margin-bottom: 25px;
+  border: 1px solid #a2a1a1;
+}
+
+.inputWrap:focus-within {
+  border: 1px solid #454545;
+}
+
+.input {
+  width: 100%;
+  outline: none;
+  border: none;
+  height: 17px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.loginButton,
+.joinButton {
+  width: 330px;
+  height: 48px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #53b463;
+  color: white;
+  cursor: pointer;
+}
+
+.signupAndFindWrap {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.signupWrap {
+  float: none;
+}
+
+.findWrap {
+  margin-left: auto;
+}
+
+.signupButton,
+.findButton {
+  color: #53b463;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}

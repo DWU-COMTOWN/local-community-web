@@ -1,0 +1,134 @@
+.signupPage {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 500px;
+  padding: 0 20px;
+  margin-top: -15%;
+
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleWrap {
+  margin-top: 90px;
+  font-size: 30px;
+  font-weight: 500;
+  color: #454545;
+  cursor: default;
+}
+
+.signup_contentWrap {
+  margin-top: 20px;
+}
+
+.signup_inputTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #505050;
+  margin-right: 10px;
+}
+
+.signup_inputWrap,
+.signup_addressInputWrap,
+.signup_phoneInputWrap,
+.signup_emailInputWrap {
+  display: flex;
+  border-radius: 0;
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #a2a1a1;
+}
+
+.signup_inputWrap {
+  width: 310px;
+}
+
+.signup_phoneInputWrap {
+  display: inline-block;
+  width: 77.5px;
+}
+
+.signup_addressInputWrap {
+  width: 218px;
+}
+
+.signup_emailWrap {
+  display: flex;
+  align-items: center;
+}
+
+.signup_emailInputWrap {
+  width: 190px;
+  display: inline-block;
+}
+
+.signup_inputWrap:focus-within,
+.signup_addressInputWrap:focus-within {
+  border: 1px solid #454545;
+}
+
+.inputTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #505050;
+}
+
+.input {
+  width: 100%;
+  outline: none;
+  border: none;
+  height: 17px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.joinButton,
+.checkButton,
+.addressButton {
+  border: none;
+  background-color: #53b463;
+  color: white;
+  cursor: pointer;
+}
+
+.joinButton {
+  margin-top: 20px;
+  height: 48px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.checkButton {
+  width: 90px;
+  font-size: 10px;
+}
+
+.errorMessageWrap {
+  position: absolute;
+  margin-top: 8px;
+  color: #ef0000;
+  font-size: 12px;
+  /* display: none; */
+}
+
+.addressWrap {
+  display: flex;
+  align-items: center;
+}
+
+.addressButton {
+  margin-left: 10px;
+  width: 80px;
+  height: 22px;
+  font-size: 10px;
+}
