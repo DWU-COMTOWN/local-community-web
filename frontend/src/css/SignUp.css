@@ -1,11 +1,11 @@
 .signupPage {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
-  max-width: 500px;
+  max-width: 550px;
   padding: 0 20px;
-  margin-top: -15%;
+  margin-top: -7.5%;
 
   left: 50%;
   transform: translate(-50%, 0);
@@ -35,6 +35,15 @@
   font-weight: 600;
   color: #505050;
   margin-right: 10px;
+  display: inline-block;
+}
+
+.errorMessage {
+  display: inline-block;
+  color: red;
+  margin-left: 5px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .signup_inputWrap,
@@ -131,4 +140,8 @@
   width: 80px;
   height: 22px;
   font-size: 10px;
+}
+
+.joinButton:disabled {
+  background-color: #dadada;
 }
