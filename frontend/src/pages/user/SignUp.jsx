@@ -24,6 +24,7 @@ export default function SignUp() {
   // 오류메세지
   const initialErrorMessages = {
     idMessage: "",
+    idCheckMessage: "",
     pwMessage: "",
     pwCheckMessage: "",
     nameMessage: "",
@@ -34,6 +35,7 @@ export default function SignUp() {
   const [notAllow, setNotAllow] = useState(true);
   const initialValidationStates = {
     isId: false,
+    isIdChecked: false,
     isPw: false,
     isPwCheck: false,
     isName: false,
@@ -84,6 +86,10 @@ export default function SignUp() {
       setErrorMessage({ ...errorMessage, pwCheckMessage: "비밀번호가 일치합니다."});
       setValidationState({ ...validationState, isPwCheck: true});
     }
+  };
+
+  const onAlert = (message) => {
+    alert(message);
   };
 
   useEffect(() => {
@@ -168,23 +174,30 @@ export default function SignUp() {
     const formValuesFilled = Object.values(formValue).every(value => value !== "");
     const validationStatesTrue = Object.values(validationState).every(value => value === true);
 
-    console.log("formValuesFilled: "+formValuesFilled);
-    console.log("validationStatesTrue: "+validationStatesTrue);
-
-    console.log("id: " + validationState.isId);
-    console.log("pw: " + validationState.isPw);
-    console.log("pwCheck: " + validationState.isPwCheck);
-    console.log("name: " + validationState.isName);
-    console.log("phone1: " + validationState.isPhone1);
-    console.log("phone2: " + validationState.isPhone2);
-    console.log("phone3: " + validationState.isPhone3);
-
     if(formValuesFilled && validationStatesTrue) {
       setNotAllow(false);
       return;
     }
     setNotAllow(true);
   }, [formValue, validationState]);
+
+  const handleCheckId = async () => {
+    try {
+      const response = await axios.get("/jwt-login/check-id", {
+        params: {userId: formValue.id}
+      });
+      const {success, message} = response.data;
+      console.log(success);
+      console.log(message);
+      setErrorMessage({ ...errorMessage, idCheckMessage: message});
+      setValidationState({ ...validationState, isIdChecked: success});
+
+      onAlert(message);
+    } catch (error) {
+      console.error("중복 확인 요청 실패: ", error);
+      setErrorMessage({ ...errorMessage, idCheckMessage: "서버와 통신 오류"});
+    }
+  };
 
   const handleSignUp = async () => {
     const signUpData = {
@@ -220,7 +233,8 @@ export default function SignUp() {
           </div>
           <div className="signup_inputWrap">
           <input type="text" className="input" value={formValue.id} onChange={onChangeId} />
-            <button className="checkButton">중복 확인</button>
+            <button className="checkButton" disabled={!validationState.isId}
+                    onClick={() => {handleCheckId();}} >중복 확인</button>
           </div>
 
           <div className="signup_inputTitle">비밀번호

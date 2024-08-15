@@ -12,6 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/jwt-login")
@@ -36,7 +40,7 @@ public class JwtLoginController {
     public String join(@Valid @RequestBody JoinRequest joinRequest, BindingResult bindingResult) {
         // userId 중복 체크
         if(userService.checkuserIdDuplicate(joinRequest.getUserId())) {
-            bindingResult.addError(new FieldError("joinRequest", "userId", "로그인 아이디가 중복됩니다."));
+            bindingResult.addError(new FieldError("joinRequest", "userId", "로그인 아이디가 중복됩니다.")); // 여기선 빼도 될것같은데??
         }
 
         // password와 passwordCheck가 같은지 체크
@@ -50,6 +54,21 @@ public class JwtLoginController {
 
         userService.join2(joinRequest);
         return "회원가입 성공";
+    }
+
+    @GetMapping("/check-id")
+    public Map<String, Object> checkId(@RequestParam(name = "userId") String userId) {
+        Map<String, Object> response = new HashMap<>();
+
+        if(userService.checkuserIdDuplicate(userId)) {
+            response.put("success", false);
+            response.put("message", "이미 존재하는 아이디입니다.");
+        } else {
+            response.put("success", true);
+            response.put("message", "사용 가능한 아이디입니다.");
+        }
+
+        return response;
     }
 
     @GetMapping("/login")
