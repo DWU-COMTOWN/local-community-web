@@ -1,5 +1,6 @@
 package com.example.backend.user.kakao.controller;
 
+import com.example.backend.user.UserService;
 import com.example.backend.user.kakao.dto.KakaoUserInfoResponseDto;
 import com.example.backend.user.kakao.service.KakaoService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.URI;
 
 @Slf4j
 @RestController
@@ -19,16 +21,21 @@ import java.io.IOException;
 @RequestMapping("")
 public class KakaoLoginController {
     private final KakaoService kakaoService;
+    private final UserService userService;
 
     @GetMapping("/callback")
     public ResponseEntity<?> callback(@RequestParam("code") String code) throws IOException {
         String accessToken = kakaoService.getAccessTokenFromKakao(code);
-
         KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
 
-        System.out.println("유저 아이디: " + userInfo.getId());
-        System.out.println("카카오 계정: " + userInfo.getKakaoAccount());
-        System.out.println("연결시점: " + userInfo.getConnectedAt());
+        if(!userService.checkKakaoUserExists(String.valueOf(userInfo.getId()))) {
+            URI redirectUri = URI.create("/jwt-login/join");
+            return ResponseEntity.status(HttpStatus.FOUND).location(redirectUri).build();
+        }
+
+        //System.out.println("유저 아이디: " + userInfo.getId());
+        //System.out.println("카카오 계정: " + userInfo.getKakaoAccount());
+        //System.out.println("연결시점: " + userInfo.getConnectedAt());
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

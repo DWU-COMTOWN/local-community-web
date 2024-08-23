@@ -20,4 +20,5 @@ public class User {
     private String phone;
     private String email;
     private String nickname;
+    private String kakaoUser;
 }

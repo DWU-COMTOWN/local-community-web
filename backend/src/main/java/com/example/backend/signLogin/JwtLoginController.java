@@ -71,6 +71,21 @@ public class JwtLoginController {
         return response;
     }
 
+    @GetMapping("/check-kakaouser")
+    public Map<String, Object> checkKakaoUser(@RequestParam(name = "kakaoUser") String kakaoUser) {
+        Map<String, Object> response = new HashMap<>();
+
+        if(userService.checkKakaoUserExists(kakaoUser)) {
+            response.put("success", true);
+            response.put("message", "존재하지 않는 회원입니다.");
+        } else {
+            response.put("success", false);
+            response.put("message", "로그인 성공");
+        }
+
+        return response;
+    }
+
     @GetMapping("/login")
     public String loginPage() {
         return "Jwt Token 화면 로그인";

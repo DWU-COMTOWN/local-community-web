@@ -30,6 +30,10 @@ public class UserService {
         return userRepository.existsByuserId(userId);
     }
 
+    public boolean checkKakaoUserExists(String kakaoUserId) {
+        return userRepository.existsByuserId(kakaoUserId);
+    }
+
     public void join(JoinRequest req) {
         userRepository.save(req.toEntity());
     }
