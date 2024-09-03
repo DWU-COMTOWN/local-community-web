@@ -12,20 +12,20 @@ export default function Bookmark() {
             <div className="side-wrap">
                 <Sidebar/>
             </div>
-            <Mypost>
+            <BookMark>
                 <Title>북마크</Title>
-            </Mypost>
+            </BookMark>
         </>
     );
 }
 
-const Mypost = styled.div`
-    margin-left: 350px;
+const BookMark = styled.div`
+    margin-left: 400px;
     margin-right: 50px;
-    width: 60%;
     justify-content: space-around;
 `;
 
 const Title = styled.div`
     font-size: 20px;
+   display: inline-block;
 `;

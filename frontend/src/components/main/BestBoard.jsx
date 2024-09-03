@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import '../../css/Main.css';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
     height: 750px;
@@ -11,19 +12,23 @@ const Wrapper = styled.div`
 function BestBoard(props) {
     const {} = props;
 
+    const navigate = useNavigate();
+
+    const handleClick = (category) => {
+        navigate(`/bestPosts`, { state: { category: category } });
+    };
+
     return (
         <>
             <Wrapper>
                 <div className="rightmenu">
                     <center>
                         <br/>
-                        {/* <input type="text"/>
-                        <input type="submit" value="검색"/> */}
                         <br/><br/>
                         <table border="1" className="table1">
                             <tbody>
                                 <tr>
-                                    <td height="40px" className="tabletitle">best 조회 게시글</td>
+                                    <td height="40px" className="tabletitle" onClick={() => handleClick("조회")}>best 조회 게시글</td>
                                 </tr>
                                 <tr>
                                     <td>워녕: 긴급재난지원금, 정부지원금 정리 딱 해드립니다 이것만 보세요···</td>

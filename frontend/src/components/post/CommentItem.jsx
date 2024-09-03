@@ -6,7 +6,6 @@ export default function CommentItem({ userToken, item, postId }) {
   const [userId, setUserId] = useState(1);
   const [replyContent, setReplyContent] = useState("");
   const [replyInputs, setReplyInputs] = useState([]);
-
   const [editStates, setEditStates] = useState({});
   const [editedContents, setEditedContents] = useState({});
 
@@ -118,7 +117,7 @@ export default function CommentItem({ userToken, item, postId }) {
   };
 
   return (
-    <div>
+    <div className="comment_parent">
       <div className="commentInfo">
         <img src="https://cf-fpi.everytime.kr/0.png" />
         <div className="comment__nickname">{item.nickname}</div>

@@ -1,28 +1,19 @@
 import React from "react";
 import "../../css/Posts.css";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useNavigate,useLocation } from "react-router-dom";
 
 export default function PostItem({ item }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleItemClick = () => {
-    // 유저 아이디 임시 설정
-    axios
-      .get(`http://localhost:8080/post/${item.postId}`, {
-        params: { userId: 1 },
-      })
-      .then((response) => {
-        const post = response.data;
-        navigate(`/post/${post.postId}`, { state: { post: post } });
-      })
-      .catch((err) => {
-        console.log("error : ", err);
-      });
-  };
+      navigate(`/post/${item.postId}`);
+  }
   return (
     <div className="posts__item" onClick={handleItemClick}>
+      {location.pathname === '/search' || location.pathname === '/bestPosts' && (
+        <div className="posts__category">{item.category} 게시판</div>
+      )}
       <div className="posts__title">{item.title}</div>
       <div className="posts__content">{item.content}</div>
       <ul className="posts__status">

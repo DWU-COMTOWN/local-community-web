@@ -16,7 +16,7 @@ export default function Post() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get(`http://localhost:8080/post/${postId}`, { params: { userId: 1 } });
+        const postResponse = await axios.get(`http://localhost:8080/post/${postId}`, { params: { userId: 4 } });
         const postData = postResponse.data;
         setPost(postData);
         setCategoryId(postData.categoryId);
@@ -151,17 +151,18 @@ export default function Post() {
                   {post.isEdited ? "(수정됨)" : ""}
                 </div>
               </div>
+              <div>조회수: {post.view}</div>
             </div>
             <ul className="post__option">
               <li>
-                <a onClick={editPost}>
+                <button onClick={editPost}>
                   수정
-                </a>
+                </button>
               </li>
               <li>
-                <a onClick={deletePost}>
+                <button onClick={deletePost}>
                   삭제
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -177,7 +178,6 @@ export default function Post() {
                 />
               ))}
           </div>
-
           <ul className="post__status">
             <li>
               <img
@@ -208,7 +208,7 @@ export default function Post() {
           </div>
         </div>
         {post.comments && post.comments.length > 0 && (
-          <div className="comments">
+          <div>
             {post.comments.map((comment, commentIndex) => (
               <div key={commentIndex}>
                 <CommentItem

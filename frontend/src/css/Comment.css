@@ -1,12 +1,13 @@
-/* .parent {
+.comment_parent {
   border: 1px solid #ced4da;
   border-top: none;
   padding: 10px;
-} */
+} 
 
 .commentInfo {
   display: flex;
   align-items: center;
+  
 }
 
 .commentInfo img {
@@ -116,7 +117,6 @@
 .reply + .reply {
   border-top: none;
 }
-
 
 .writeReply {
   display: flex;

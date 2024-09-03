@@ -7,24 +7,26 @@ import Sidebar from "../../components/my/Sidebar";
 export default function MyComment() {
     return (
         <>
-            <Header/>
+            <div className="root-wrap">
+                <Header/>
+            </div>
             <div className="side-wrap">
                 <Sidebar/>
             </div>
-            <Mypost>
+            <Mycomment>
                 <Title>댓글 단 글</Title>
-            </Mypost>
+            </Mycomment>
         </>
     );
 }
 
-const Mypost = styled.div`
-    margin-left: 350px;
+const Mycomment = styled.div`
+    margin-left: 400px;
     margin-right: 50px;
-    width: 60%;
     justify-content: space-around;
 `;
 
 const Title = styled.div`
     font-size: 20px;
+    display: inline-block;
 `;

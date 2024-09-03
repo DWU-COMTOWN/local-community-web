@@ -52,6 +52,8 @@ public class Post {
     private LocalDateTime modifiedDate;
     @Column(name = "is_edited")
     private boolean isEdited = false;
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int view;
 
     public Post(String title, String content, User user, Category category) {
         this.title = title;

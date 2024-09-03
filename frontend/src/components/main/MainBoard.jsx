@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import '../../css/Main.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
 
 const inputStyle = {
     width: '750px',
@@ -24,15 +26,25 @@ function MainBoard(props) {
     const navigate = useNavigate();
 
     const handleClick = (id, category) => {
-        navigate(`/posts/${id}`, { state: { category } });
+        navigate(`/posts`, { state: { categoryId: id, category: category } });
+    };
+
+    const [searchKeyword, setSearchKeyword] = useState(null);  
+    const searchPosts = async (event) => {
+        event.preventDefault();
+        if (!searchKeyword) {
+          alert("검색어를 입력하세요.");
+          return;
+        }
+        navigate(`/search`, { state: { keyword: searchKeyword} });
     };
     
     return (
         <>
             <center>
                 <p/>
-                <input type="text" style={inputStyle} placeholder="제목, 내용, 해시태그" />                                                                                                                                                         🔍"/> &nbsp;
-                <input type="submit" value="검색"/>
+                <input type="text" style={inputStyle} placeholder="글 제목, 내용" onChange={(event) => setSearchKeyword(event.target.value)}/>                                                                                                                                                         🔍"/> &nbsp;
+                <input type="submit" value="검색" onClick={searchPosts}/>
                 <p/>
 
                 <BoardWrapper>

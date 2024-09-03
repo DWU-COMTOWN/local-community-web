@@ -20,8 +20,9 @@ function MainMenu(props) {
     const navigate = useNavigate();
 
     const handleClick = (id, category) => {
-        navigate(`/posts/${id}`, { state: { category } });
+        navigate(`/posts`, { state: { categoryId: id, category: category } });
     };
+
 
     return (
         <>

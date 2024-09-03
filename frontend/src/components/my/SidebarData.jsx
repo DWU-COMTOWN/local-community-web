@@ -15,4 +15,8 @@ export const SidebarData = [
     title: "북마크",
     link: "/bookmark",
   },
+  {
+    title: "탈퇴하기",
+    link: "/deleteacc"
+  },
 ];

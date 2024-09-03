@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import PostItem from "../../components/post/PostItem";
 import "../../css/Posts.css";
 import Pagination from "react-js-pagination";
 import axios from "axios";
 
-export default function Posts() {
-  const navigate = useNavigate();
+export default function Search() {
   const location = useLocation();
-  const [categoryId, setCategoryId] = useState(location.state.categoryId || null);
-  const [category, setCategory] = useState(location.state.category || null);
-
   const query = new URLSearchParams(location.search);
   const initialPage = parseInt(query.get("page")) || 0;
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [page, setPage] = useState(1);
-  const [searchKeyword, setSearchKeyword] = useState(null);
+  const [searchKeyword, setSearchKeyword] = useState(location.state.keyword || null);
   const [totalPages, setTotalPages] = useState(0);
   const [postList, setPostList] = useState([]);
-
 
   const fetchPosts = async (page) => {
     try {
@@ -26,7 +21,6 @@ export default function Posts() {
         `http://localhost:8080/posts`,
         {
           params: {
-            categoryId: categoryId,
             page: page - 1,
             size: 5,
             keyword: searchKeyword || null,
@@ -34,7 +28,6 @@ export default function Posts() {
         }
       );
       setPostList(postListResponse.data.content);
-      setCategory(category);
       setTotalPages(postListResponse.data.totalPages);
       setCurrentPage(page);
     } catch (err) {
@@ -63,8 +56,7 @@ export default function Posts() {
 
   return (
     <div className="root">
-          <div className="postContainer">
-      <h2>{category} 게시판</h2>
+    <div className="postContainer">
       <div className="search">
         <input
           type="text"
@@ -89,22 +81,8 @@ export default function Posts() {
             onChange={handlePageChange}
           />
         </div>
-        <div className="posts__btnContainer">
-          <button
-            onClick={() => {
-              navigate("/post/create", {
-                state: {
-                  categoryId: categoryId,
-                  category: category,
-                },
-              });
-            }}
-          >
-            작성
-          </button>
-        </div>
       </div>
-      </div>
+    </div>
     </div>
   );
 }

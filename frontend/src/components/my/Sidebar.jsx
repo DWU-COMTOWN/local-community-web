@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../css/App.css';
+import '../../css/MyPage.css';
 import {SidebarData} from './SidebarData'
 
 function Sidebar() {

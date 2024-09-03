@@ -1,12 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  min-height: 100vh;
-}
-
 .root {
   display: flex;
   flex-direction: column;
@@ -15,79 +6,93 @@ body {
 }
 
 .post__parent {
-  width: 40%;
+  width: 50%;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .post__container {
   border: 1px solid #ced4da;
-  padding: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
 }
 
 .post__userInfo {
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: nowrap;
 }
 
 .post__userInfo img {
-  width: 6vh;
-  height: 6vh;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
-  margin: 5px;
-  position: relative;
-  border-radius: 10px;
-}
-
-.post__info {
-  margin: 5px; /* 원하는 만큼의 간격으로 조절 */
-  padding: 5px;
+  border-radius: 20%;
+  margin-right: 10px;
 }
 
 .post__nickname {
-  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
 .post__date {
   display: flex;
+  align-items: center;
   color: grey;
   font-size: 15px;
-}
-
-.post__isEdited {
-  padding-left: 5px;
-  color: grey;
-  font-size: 14px;
 }
 
 .post__option {
   display: flex;
   list-style: none;
-  color: grey;
   margin-left: auto;
-  cursor: pointer;
+  color: grey;
 }
 
 .post__option li {
   margin-left: 10px;
 }
 
-.post__title {
-  color: black;
-  font-size: 25px;
-  font-family: Inter;
-  font-weight: 1000;
+.post__isEdited {
+  margin: 0 0 5px 5px;
+  color: grey;
+  font-size: 14px;
+}
+
+.post__option button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.post__title, .post__content {
   word-wrap: break-word;
-  padding: 10px;
+  word-break: break-word; 
+  padding: 10px 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.post__title {
+  font-size: 24px;
+  font-weight: 700;
 }
 
 .post__content {
-  color: black;
   font-size: 16px;
-  font-family: Inter;
   font-weight: 400;
-  word-wrap: break-word;
-  padding: 10px;
 }
 
 .post__img {
@@ -95,55 +100,55 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 10px;
+  width: 100%;
 }
 
 .post__img img {
-  width: 90%;
+  width: 100%;
+  height: auto;
   object-fit: cover;
 }
 
 .post__status {
   display: flex;
   list-style: none;
-  padding: 10px;
+  padding: 15px 0;
   gap: 10px;
+  justify-content: flex-start;
 }
 
 .post__status li {
-  color: grey;
   display: flex;
-  align-items: center; /* 세로축 가운데 정렬 */
-  justify-content: center; /* 가로축 가운데 정렬 */
+  align-items: center;
+  color: grey;
 }
 
 .post__status img {
-  width: 2.5vh;
-  height: 2.5vh;
+  width: 20px;
+  height: 20px;
   margin-right: 5px;
 }
 
 .post__btnContainer {
-  padding: 10px;
+  display: flex;
+  gap: 10px;
+  padding: 5px 0;
 }
 
-.post__btnContainer button{
-  margin-right: 5px;
-  padding: 8px;
-  border-radius: 10px;
+.post__btnContainer button {
+  padding: 5px;
+  width: 60px;
+  background-color: #F2F2F2;
   border: none;
-  color: grey;
+  border-radius: 8px;
   cursor: pointer;
-}
-
-.comments {
-  border: 1px solid #ced4da;
-  padding: 15px;
+  justify-content: flex-end;
+  display: inline-block;
 }
 
 .writeComment {
   display: flex;
-  align-items: center; /* 수직 가운데 정렬 (선택 사항) */
+  align-items: center;
   border: 1px solid #ced4da;
   border-top: none;
   padding: 5px;
@@ -153,18 +158,28 @@ body {
 .commentText {
   flex: 1;
   margin-right: 10px;
-  border: none;
-  box-sizing: border-box;
-  font-size: 15px;
   padding: 10px;
+  border: none;
   background-color: #f8f9fa;
 }
 
 .post__submit {
   padding: 8px;
-  cursor: pointer;
+  width: 50px;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
-  border-radius: 4px;
-  color: grey;
+  border-radius: 5px;
+  cursor: pointer;
+  justify-content: flex-end;
+  display: inline-block;
+}
+
+@media (max-width: 600px) {
+  .post__parent {
+    width: 100%;
+  }
+
+  .post__title, .post__content {
+    font-size: 18px;
+  }
 }

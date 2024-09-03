@@ -68,6 +68,11 @@ export default function Write() {
       return;
     }
 
+    if (title.length > 50) {
+      alert("제목은 50자를 넘을 수 없습니다.");
+      return;
+    }
+
     const postRequest = {
       title: title,
       content: content,
@@ -118,17 +123,21 @@ export default function Write() {
             rows="15"
             onChange={(event) => setContent(event.target.value)}
           />
-          <div className="write__imgContainers">
-            {previewImg.map((item, index) => (
-              <div key={index}>
-                <img
-                  src={item}
-                  alt={`Image ${index + 1}`}
-                  className="write__previewImg"
-                  onClick={() => deleteImage(index)}
-                />
+          <div>
+            {previewImg.length > 0 && (
+              <div className="write__imgContainers">
+                {previewImg.map((item, index) => (
+                  <div key={index}>
+                    <img
+                      src={item}
+                      alt={`Image ${index + 1}`}
+                      className="write__previewImg"
+                      onClick={() => deleteImage(index)}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
           <form onSubmit={handleSubmit}>
             <div className="write__btnContainer">

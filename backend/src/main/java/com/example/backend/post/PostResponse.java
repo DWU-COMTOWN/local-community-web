@@ -35,8 +35,8 @@ public class PostResponse {
     private LocalDateTime  modifiedDate;
     private List<CommentResponse> comments = new ArrayList<>();
     private List<PostImageResponse> images = new ArrayList<>();
-
-    public PostResponse(Long postId, Long userId, Long categoryId, String nickname, String title, String content, int likeCount, int commentCount, int scrapCount, boolean isEdited, boolean isScrapped, boolean isLiked, LocalDateTime createdDate, LocalDateTime modifiedDate, List<CommentResponse> comments, List<PostImageResponse> images) {
+    private int view;
+    public PostResponse(Long postId, Long userId, Long categoryId, String nickname, String title, String content, int likeCount, int commentCount, int scrapCount, boolean isEdited, boolean isScrapped, boolean isLiked, LocalDateTime createdDate, LocalDateTime modifiedDate, List<CommentResponse> comments, List<PostImageResponse> images, int view) {
         this.postId = postId;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -53,6 +53,7 @@ public class PostResponse {
         this.modifiedDate = modifiedDate;
         this.comments = comments;
         this.images = images;
+        this.view = view;
 
     }
 
@@ -73,7 +74,8 @@ public class PostResponse {
                 post.getCreatedDate(),
                 post.getModifiedDate(),
                 comments,
-                images
+                images,
+                post.getView()
         );
     }
 }

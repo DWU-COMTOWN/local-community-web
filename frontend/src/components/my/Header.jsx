@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../css/App.css';
+import "../../css/MyPage.css";
 import { Link } from 'react-router-dom';
 
 export default function Header() {
@@ -8,12 +8,12 @@ export default function Header() {
             <div className='header-wrap'>
                 <div className="header-left-wrap">
                     <Link to='/'>
-                        <h1>TOWN-IN</h1>
+                        <li className='header-nav-item'>TOWN-IN</li>
                     </Link>
                     <ul>
-                        <li className='header-nav-item'>
+                        <Link to = '/'><li className='header-nav-item'>
                             게시판
-                        </li>
+                        </li></Link>
                     </ul>
                     <ul>
                         <li className='header-nav-item'>

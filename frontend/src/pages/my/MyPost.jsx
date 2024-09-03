@@ -71,21 +71,21 @@ export default function MyPost() {
 }
 
 const Mypost = styled.div`
-  margin-left: 400px;
-  margin-right: 50px;
-  width: 60%;
-  justify-content: space-around;
+    margin-left: 400px;
+    margin-right: 50px;
+    justify-content: space-around;
 `;
 
 const Title = styled.div`
-  font-weight: bold;
-  font-size: 20px;
-  margin-bottom: 20px;
+    font-size: 20px;
+    display: inline-block;
 `;
 
 const Box = styled.div`
   border: 1px solid #989898;
   padding: 10px;
+    margin-top : 15px;
+    margin-bottom: 15px;
 `;
 
 const Board = styled.div`
@@ -110,22 +110,33 @@ const Bottom = styled.div`
   color: #989898;
 `;
 const PgBox = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  ul {
-    list-style: none;
-  }
-  li {
-    display: inline-block;
-    width: 20px;
-  }
-  li a {
-    text-decoration: none;
-    color: #484848;
-  }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    
+    .pagination a {
+        border : 0;
+    }
 
-  li.active a {
-    color: green;
-  }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    ul.pagination li {
+        display: inline-block;
+        width: 20px;
+    }
+
+    ul.pagination li a {
+        text-decoration: none; 
+        color: #484848;
+    }
+
+    ul.pagination li.active a {
+        color: green;
+    }
+
 `;

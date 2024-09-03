@@ -65,6 +65,11 @@ export default function Edit() {
       return;
     }
 
+    if (title.length > 50) {
+      alert("제목은 50자를 넘을 수 없습니다.");
+      return;
+    }
+
     const postEditRequest = {
       title: title,
       content: content,
@@ -104,7 +109,7 @@ export default function Edit() {
     <div className="root">
       <h2>{category} 게시판</h2>
         <div className="write__parent">
-              <input
+          <input
                 className="write__title"
                 type="text"
                 placeholder="제목을 입력하세요."
@@ -119,18 +124,21 @@ export default function Edit() {
             value={content}
             onChange={(event) => setContent(event.target.value)}
           />
-          <div className="write__imgContainers">
-            {previewImg.map((item, index) => (
-              <div key={index}>
-                <img
-                  src={item}
-                  alt={`Image ${index + 1}`}
-                  className="write__previewImg"
-                  onClick={() => deleteImage(index)}
-                  value={previewImg}
-                />
+          <div>
+            {previewImg.length > 0 && (
+              <div className="write__imgContainers">
+                {previewImg.map((item, index) => (
+                  <div key={index}>
+                    <img
+                      src={item}
+                      alt={`Image ${index + 1}`}
+                      className="write__previewImg"
+                      onClick={() => deleteImage(index)}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           </div>
           <form onSubmit={handleSubmit}>
             <div className="write__btnContainer">
