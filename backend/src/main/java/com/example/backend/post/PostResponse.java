@@ -53,6 +53,7 @@ public class PostResponse {
         this.modifiedDate = modifiedDate;
         this.comments = comments;
         this.images = images;
+
     }
 
     public static PostResponse toDto(Post post, boolean isScrapped, boolean isLiked, List<CommentResponse> comments, List<PostImageResponse> images) {
