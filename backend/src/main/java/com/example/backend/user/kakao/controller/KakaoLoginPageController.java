@@ -1,6 +1,7 @@
 package com.example.backend.user.kakao.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +22,11 @@ public class KakaoLoginPageController {
         model.addAttribute("location", location);
 
         return "kakaoLogin";
+    }
+
+    @GetMapping("/location")
+    public ResponseEntity<String> getKakaoLocation() {
+        String kakaoLocation = "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id="+client_id+"&redirect_uri="+redirect_uri;
+        return ResponseEntity.ok(kakaoLocation);
     }
 }

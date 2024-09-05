@@ -48,6 +48,10 @@ export default function SignUp() {
   const [errorMessage, setErrorMessage] = useState(initialErrorMessages);
   const [validationState, setValidationState] = useState(initialValidationStates);
 
+  // 카카오 로그인 전용 토큰, useId
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
+
   const onChangeId = (e) => {
     const currentId = e.target.value;
     setFormValue({ ...formValue, id: currentId});
@@ -91,6 +95,43 @@ export default function SignUp() {
   const onAlert = (message) => {
     alert(message);
   };
+
+  // Base64 디코딩 (카카오 로그인 jwt 페이로드 추출용)
+  const base64Decode = (str) => {
+    return decodeURIComponent(
+        atob(str)
+            .split('')
+            .map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`)
+            .join('')
+    );
+  };
+
+  // JWT 토큰에서 userId 추출
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split('.')[1]; // payload 부분 추출
+      const base64 = base64Decode(base64Url); // Base64 디코딩
+      const payload = JSON.parse(base64); // JSON 파싱
+
+      return payload.sub; // userId 추출  (sub필드에 userId 담겨있음)
+    } catch (error) {
+      console.error("토큰 파싱 중 에러 발생:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const jwtToken = urlParams.get('token');
+
+    if(jwtToken) {
+      setToken(jwtToken);
+      const extractedUserId = parseJwt(jwtToken);
+      if(extractedUserId) {
+        setUserId(extractedUserId);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (formValue.pw === "" && formValue.pwCheck === "") {
@@ -230,6 +271,7 @@ export default function SignUp() {
         <div className="signup_contentWrap">
           <div className="signup_inputTitle">아이디
             <div className="errorMessage">{errorMessage.idMessage}</div>
+            <div>kakao userId : {userId}</div>
           </div>
           <div className="signup_inputWrap">
           <input type="text" className="input" value={formValue.id} onChange={onChangeId} />
