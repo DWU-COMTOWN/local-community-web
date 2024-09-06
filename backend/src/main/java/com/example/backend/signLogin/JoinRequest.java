@@ -22,6 +22,8 @@ public class JoinRequest {
     private String address;
     private String phone;
     private String email;
+    private String nickname;
+    private String kakaoUser;
 
     public User toEntity() {
         return User.builder()
@@ -31,6 +33,8 @@ public class JoinRequest {
                 .address(this.address)
                 .phone(this.phone)
                 .email(this.email)
+                .nickname(this.nickname)
+                .kakaoUser(this.kakaoUser)
                 .build();
     }
 
@@ -42,6 +46,8 @@ public class JoinRequest {
                 .address(this.address)
                 .phone(this.phone)
                 .email(this.email)
+                .nickname(this.nickname)
+                .kakaoUser(this.kakaoUser)
                 .build();
     }
 }

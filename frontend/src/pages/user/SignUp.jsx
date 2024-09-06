@@ -55,7 +55,7 @@ export default function SignUp() {
   const onChangeId = (e) => {
     const currentId = e.target.value;
     setFormValue({ ...formValue, id: currentId});
-    const idRegExp = /^[a-zA-z0-9]{4,25}$/;
+    const idRegExp = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{4,25}$/;
 
     if(!idRegExp.test(currentId)){
       setErrorMessage({ ...errorMessage, idMessage: "영문, 숫자 포함 4~25자"});
@@ -129,6 +129,11 @@ export default function SignUp() {
       const extractedUserId = parseJwt(jwtToken);
       if(extractedUserId) {
         setUserId(extractedUserId);
+        setFormValue(prevFormValue => ({
+          ...prevFormValue,
+          id: extractedUserId,
+          pw: extractedUserId + "pw"
+        }));
       }
     }
   }, []);
@@ -211,9 +216,22 @@ export default function SignUp() {
     setFormValue({ ...formValue, selected: e.target.value});
   };
 
+
+  // 회원가입 유효성 검사
   useEffect(() => {
-    const formValuesFilled = Object.values(formValue).every(value => value !== "");
-    const validationStatesTrue = Object.values(validationState).every(value => value === true);
+    const validationStatesForKakao = ["isName", "isPhone1", "isPhone2", "isPhone3"];
+    const formValuesForKakao = ["name", "nickname", "address", "phone1" ,"phone2", "phone3", "email", "selected"];
+
+    let formValuesFilled;
+    let validationStatesTrue;
+
+    if(userId === "") {
+      formValuesFilled = Object.values(formValue).every(value => value !== "");
+      validationStatesTrue = Object.values(validationState).every(value => value === true);
+    } else {
+      formValuesFilled = formValuesForKakao.every((field) => formValue[field] !== "");
+      validationStatesTrue = validationStatesForKakao.every((field) => validationState[field] === true);
+    }
 
     if(formValuesFilled && validationStatesTrue) {
       setNotAllow(false);
@@ -250,11 +268,16 @@ export default function SignUp() {
       phone: `${formValue.phone1}-${formValue.phone2}-${formValue.phone3}`,
       email: `${formValue.email}@${formValue.selected}`,
       nickname: formValue.nickname,
+      kakaoUser: userId,
     };
     console.log(signUpData);
 
     try {
-      const response = await axios.post("/jwt-login/join", signUpData);
+      const response = await axios.post("/jwt-login/join", signUpData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // 토큰을 헤더로 전송
+        },
+      });
       if (response.data === "회원가입 성공") {
         window.location.href = "/jwt-login/login";
       } else {
@@ -269,7 +292,36 @@ export default function SignUp() {
       <div className="signupPage">
         <div className="titleWrap">회원가입</div>
         <div className="signup_contentWrap">
-          <div className="signup_inputTitle">아이디
+          {!userId && (
+              <>
+                <div className="signup_inputTitle">아이디
+                  <div className="errorMessage">{errorMessage.idMessage}</div>
+                </div>
+                <div className="signup_inputWrap">
+                  <input type="text" className="input" value={formValue.id} onChange={onChangeId} />
+                  <button className="checkButton" disabled={!validationState.isId}
+                          onClick={() => {handleCheckId();}} >중복 확인</button>
+                </div>
+
+                <div className="signup_inputTitle">비밀번호
+                  <div className="errorMessage">{errorMessage.pwMessage}</div>
+                </div>
+                <div className="signup_inputWrap">
+                  <input type="password" className="input" value={formValue.pw}
+                         onChange={onChangePw} />
+                </div>
+
+                <div className="signup_inputTitle">비밀번호 확인
+                  <div className="errorMessage"
+                       style={{color: validationState.isPwCheck ? '#53b463' : 'red'}}>
+                    {errorMessage.pwCheckMessage}</div>
+                </div>
+                <div className="signup_inputWrap">
+                  <input type="password" className="input" value={formValue.pwCheck} onChange={onChangePwCheck} />
+                </div>
+              </>
+          )}
+          {/*<div className="signup_inputTitle">아이디
             <div className="errorMessage">{errorMessage.idMessage}</div>
             <div>kakao userId : {userId}</div>
           </div>
@@ -294,7 +346,7 @@ export default function SignUp() {
           </div>
           <div className="signup_inputWrap">
           <input type="password" className="input" value={formValue.pwCheck} onChange={onChangePwCheck} />
-          </div>
+          </div>*/}
 
           <div className="signup_inputTitle">이름
             <div className="errorMessage">{errorMessage.nameMessage}</div>

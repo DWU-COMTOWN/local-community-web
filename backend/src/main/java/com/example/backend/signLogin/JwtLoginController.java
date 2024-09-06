@@ -39,21 +39,29 @@ public class JwtLoginController {
     @PostMapping("/join")
     public String join(@Valid @RequestBody JoinRequest joinRequest, BindingResult bindingResult) {
         // userId 중복 체크
-        if(userService.checkuserIdDuplicate(joinRequest.getUserId())) {
+        if(!isKakaoLogin(joinRequest) && userService.checkuserIdDuplicate(joinRequest.getUserId())) {
             bindingResult.addError(new FieldError("joinRequest", "userId", "로그인 아이디가 중복됩니다.")); // 여기선 빼도 될것같은데??
         }
 
         // password와 passwordCheck가 같은지 체크
-        if(!joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
+        if(!isKakaoLogin(joinRequest) && !joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
             bindingResult.addError(new FieldError("joinRequest", "passwordCheck", "비밀번호가 일치하지 않습니다."));
         }
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("회원가입 실패. 에러 목록:");
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println(error.toString());
+            });
             return "회원가입 실패";
         }
 
         userService.join2(joinRequest);
         return "회원가입 성공";
+    }
+
+    private boolean isKakaoLogin(JoinRequest joinRequest) {
+        return joinRequest.getKakaoUser() != null && !joinRequest.getKakaoUser().isEmpty();
     }
 
     @GetMapping("/check-id")
