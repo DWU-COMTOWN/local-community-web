@@ -1,0 +1,61 @@
+# Workflow 이름
+name: Backend Auto Deploy to EC2
+
+# Event(실행되는 시점을 설정)
+# dev 브랜치에 push 될 때 아래 Workflow 실행
+on:
+  push:
+    branches:
+      - dev
+      - feat/deploy/#28
+
+# Workflow Job(병렬 수행)
+jobs:
+  # Job 이름
+  Deploy_Backend_to_EC2:
+    # OS
+    runs-on: ubuntu-latest
+
+    # Job Step
+    steps:
+      - name: EC2 서버에 SSH 원격 접속 후 자동 배포 작업 수행
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          KAKAO_CLIENT_ID: ${{ secrets.KAKAO_CLIENT_ID }}
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stops: true
+          script: |
+            cd /home/ubuntu/local-community-web
+            git pull origin dev
+            cd backend
+            rm -rf src/main/test
+            rm -rf src/main/resources/application.properties
+            echo "
+            spring.datasource.url=$DATABASE_URL
+            spring.datasource.username=$DATABASE_USERNAME
+            spring.datasource.password=$DATABASE_PASSWORD
+            spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+            spring.jpa.hibernate.ddl-auto=update
+            kakao.client_id=$KAKAO_CLIENT_ID
+            kakao.redirect_uri=http://localhost:8080/callback
+            server.servlet.session.tracking-modes=cookie
+            server.servlet.session.timeout=1800
+            cloud.aws.credentials.accessKey=$AWS_ACCESS_KEY
+            cloud.aws.credentials.secretKey=$AWS_SECRET_KEY
+            cloud.aws.s3.bucket=town-in
+            cloud.aws.region.static=ap-northeast-2
+            cloud.aws.stack.auto=false
+            spring.redis.host=localhost
+            spring.redis.port=6379
+            " > src/main/resources/application.properties
+            ./gradlew clean build
+            sudo fuser -k -n tcp 8080 || true
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &

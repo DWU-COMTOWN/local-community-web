@@ -1,0 +1,38 @@
+# 빌드 아티팩트 (Spring Boot)
+/target/
+/build/
+*.jar
+*.war
+*.class
+
+# Node.js/React 관련 (React)
+/node_modules/
+/dist/
+/build/
+
+# 환경 설정 파일
+.env
+application.properties
+application.yml
+
+# 로그 파일
+*.log
+spring.log
+
+# IntelliJ IDEA 관련 파일
+/.idea/
+/*.iml
+/out/
+
+# OS 관련 파일
+.DS_Store
+Thumbs.db
+
+# 캐시 및 임시 파일
+/cache/
+/tmp/
+/*.tmp
+*.swp
+
+# Git 관련
+.git/
