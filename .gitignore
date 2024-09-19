@@ -1,6 +1,7 @@
 # 빌드 아티팩트 (Spring Boot)
 /target/
 /build/
+/.gradle/
 *.jar
 *.war
 *.class

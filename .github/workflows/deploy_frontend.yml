@@ -22,8 +22,8 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            cd /home/ubuntu/local-community-web/frontend  # 프론트엔드 디렉토리로 이동
-            git pull origin dev  # 최신 코드 가져오기
-            npm install  # 의존성 설치
-            npm run build  # 빌드
+            cd /home/ubuntu/local-community-web/frontend
+            git pull origin dev
+            npm install
+            npm run build
             aws s3 sync build/ s3://town-in-web-page --region ap-northeast-2 --delete
