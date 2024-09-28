@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import "../../css/Login.css";
 
 export default function Login() {
@@ -9,6 +10,15 @@ export default function Login() {
     const [success, setSuccess] = useState("");
     const [kakaoLocation, setKakaoLocation] = useState("");
     const [userId, setUserId] = useState(null);
+
+    const navigate = useNavigate();
+    const handleSignUpClick = () => {
+        navigate('/jwt-login/join');
+    };
+
+    const handleFindIdClick = () => {
+        navigate('/jwt-login/find-id');
+    };
 
     const handleId = (e) => {
         setId(e.target.value);
@@ -98,12 +108,16 @@ export default function Login() {
             {error && <div className="errorMessage">{error}</div>}
             {success && <div className="successMessage">{success}</div>}
             <div className="signupAndFindWrap">
-                <div className="signupWrap">
-                    <button className="signupButton">회원가입</button>
+                <div className="findWrap">
+                    <button className="findButton" onClick={handleFindIdClick}>아이디 찾기&nbsp;&nbsp;|</button>
                 </div>
                 &nbsp;&nbsp;
                 <div className="findWrap">
-                    <button className="findButton">아이디·비밀번호 찾기</button>
+                    <button className="findButton">비밀번호 찾기&nbsp;&nbsp;|</button>
+                </div>
+                &nbsp;&nbsp;
+                <div className="signupWrap">
+                    <button className="signupButton" onClick={handleSignUpClick}>회원가입</button>
                 </div>
             </div>
 

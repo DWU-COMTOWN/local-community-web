@@ -1,0 +1,47 @@
+.noticeTitle{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.notice{
+    font-size: 13px;
+    text-align: center;
+}
+
+.findId_inputAndBtnWrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.findId_inputWrap{
+    flex: 1;
+    border-radius: 0;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #a2a1a1;
+}
+
+.findId_btn{
+    flex-shrink: 0;
+    border: none;
+    background-color: #53b463;
+    color: white;
+    cursor: pointer;
+    height: 41px;
+    width: 65px;
+    font-size: 13px;
+}
+
+.findId_smallMsg{
+    font-size: 13px;
+}
+
+.infoMessage {
+    color: #909090;
+    font-size: 12px;
+}

@@ -3,7 +3,6 @@ import com.example.backend.signLogin.JoinRequest;
 import com.example.backend.signLogin.LoginRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +31,10 @@ public class UserService {
 
     public boolean checkKakaoUserExists(String kakaoUserId) {
         return userRepository.existsByuserId(kakaoUserId);
+    }
+
+    public boolean checkUserPhoneExists(String phone) {
+        return userRepository.existsByPhone(phone);
     }
 
     public void join(JoinRequest req) {
