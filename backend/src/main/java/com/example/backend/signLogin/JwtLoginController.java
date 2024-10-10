@@ -57,28 +57,61 @@ public class JwtLoginController {
         return "Jwt Token 화면 로그인";
     }
 
-    @PostMapping("/login")public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, BindingResult bindingResult,
-                                                              HttpServletResponse response) {
-
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, BindingResult bindingResult,
+//                                        HttpServletResponse response) {
+//
+//        User user = userService.login(loginRequest);
+//
+//        if (user == null) {
+//            bindingResult.reject("loginFail", "로그인 아이디 또는 비밀번호가 틀렸습니다.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .header("Content-Type", "text/plain; charset=UTF-8")
+//                    .body("로그인 실패");
+//        }
+//
+//        long expireTimeMs = 1000 * 60 * 60; // Token 유효 시간 = 60분
+//        String jwtToken = JwtTokenUtil.createToken(user.getUserId(), expireTimeMs);
+//
+//        Cookie cookie = new Cookie("jwtToken", jwtToken);
+//        cookie.setHttpOnly(true);
+//        cookie.setMaxAge((int) (expireTimeMs / 1000));
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+//
+//        return ResponseEntity.ok()
+//                .header("Content-Type", "text/plain; charset=UTF-8")
+//                .body("로그인 성공");
+//    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         User user = userService.login(loginRequest);
 
         if (user == null) {
-            bindingResult.reject("loginFail", "로그인 아이디 또는 비밀번호가 틀렸습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
         }
 
-        long expireTimeMs = 1000 * 60 * 60; // Token 유효 시간 = 60분
-        String jwtToken = JwtTokenUtil.createToken(user.getUserId(), expireTimeMs);
+        long expireTimeMs = 1000 * 60 * 60; // 60분 유효
+        String jwtToken = JwtTokenUtil.createToken(user.getUserId(), user.getId(), expireTimeMs);  // userId 기반으로 토큰 생성
 
+        // 로그 추가 - 로그인된 사용자 userId 확인
+        System.out.println("Logged in userId: " + user.getUserId());
+
+        // 쿠키에 JWT 토큰 저장
         Cookie cookie = new Cookie("jwtToken", jwtToken);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge((int) (expireTimeMs / 1000));
+        cookie.setMaxAge((int) (expireTimeMs / 1000)); // 쿠키 만료 시간 설정
         cookie.setPath("/");
         response.addCookie(cookie);
 
+        // 캐시 비활성화 헤더 설정
+        response.addCookie(cookie);
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
         return ResponseEntity.ok("로그인 성공");
     }
-
     @GetMapping("/logout")
     public String logout(HttpServletResponse response) {
         // 쿠키 파기

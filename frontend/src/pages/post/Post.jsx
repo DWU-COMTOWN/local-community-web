@@ -13,16 +13,21 @@ export default function Post() {
   const [post, setPost] = useState(location.state || null);
   const [commentInput, setCommentInput] = useState("");
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get(`http://localhost:8080/post/${postId}`, { params: { userId: 2 } });
+        const postResponse = await axios.get(`http://localhost:8080/post/${postId}`, {
+          withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
+        });
         const postData = postResponse.data;
         setPost(postData);
         setCategoryId(postData.categoryId);
 
         if (postData && postData.categoryId) {
-          const categoryResponse = await axios.get(`http://localhost:8080/category/${postData.categoryId}`);
+          const categoryResponse = await axios.get(`http://localhost:8080/category/${postData.categoryId}`, {
+            withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
+          });
           setCategory(categoryResponse.data);
         }
       } catch (err) {
@@ -36,68 +41,73 @@ export default function Post() {
     return <div>Loading...</div>; // 로딩 중 메시지
   }
 
-  const likePost = () => {
-    console.log(post.isLiked);
+  const likePost = async () => {
+    if (post.loginId === post.userId) {
+      alert("내가 쓴 글은 추천할 수 없습니다.");
+      return;
+    }
+  
     if (post.isLiked) {
       alert("이미 이 글을 추천하셨습니다.");
       return;
     }
-
+  
     if (window.confirm("이 글을 추천하시겠습니까?")) {
-      axios
-        .post("http://localhost:8080/post/like", {
-          userId: 1, // 로그인한 사용자 ID로 변경 필요
-          postId: postId,
-        })
-        .then(function (response) {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log("error : ");
-          console.log(err);
+      try {
+        await axios.post(`http://localhost:8080/post/${postId}/like`, {}, {
+          withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
         });
+        window.location.reload();
+      } catch (err) {
+        console.error("Error liking post:", err);
+      }
     }
   };
-
-  const scrapPost = () => {
+  
+  const scrapPost = async () => {
+    if (post.loginId === post.userId) {
+      alert("내가 쓴 글은 스크랩할 수 없습니다.");
+      return;
+    }
+  
     const confirmMessage = post.isScrapped
       ? "이 글의 스크랩을 취소하시겠습니까?"
       : "이 글을 스크랩하시겠습니까?";
+    
     if (window.confirm(confirmMessage)) {
       const endpoint = post.isScrapped
-        ? "http://localhost:8080/post/unscrap"
-        : "http://localhost:8080/post/scrap";
-
-      axios
-        .post(endpoint, {
-          userId: 1, // 로그인한 사용자 ID로 변경 필요
-          postId: postId,
-        })
-        .then(function (response) {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log("error : ");
-          console.log(err);
+        ? `http://localhost:8080/post/${postId}/unscrap`
+        : `http://localhost:8080/post/${postId}/scrap`;
+  
+      try {
+        await axios.post(endpoint, {}, {
+          withCredentials: true
         });
+        
+        window.location.reload();
+      } catch (err) {
+        console.error("Error scrapping post:", err);
+      }
     }
   };
 
-  const createComment = (event) => {
-    event.preventDefault();
-    axios
-      .post("http://localhost:8080/comment/create", {
-        userId: 1, // 로그인한 사용자 ID로 변경 필요
-        postId: postId,
-        content: commentInput,
-      })
-      .then(function (response) {
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log("error : ");
-        console.log(err);
-      });
+  const createComment = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/comment/create",
+        {
+          postId: postId,
+          content: commentInput,
+        },
+        {
+          withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
+        }
+      );
+
+      setCommentInput('');
+    } catch (error) {
+      console.error("Error creating comment:", error);
+    }
   };
 
   const editPost = (event) => {
@@ -117,7 +127,9 @@ export default function Post() {
     e.preventDefault();
     if (window.confirm("이 글을 삭제하시겠습니까?")) {
       axios
-        .delete(`http://localhost:8080/post/${postId}`)
+        .delete(`http://localhost:8080/post/${postId}`, {
+          withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
+        })
         .then((response) => {
             navigate(`/posts`, { state: { categoryId: categoryId, category: category } });
         })
@@ -146,19 +158,23 @@ export default function Post() {
                   {post.isEdited ? "(수정됨)" : ""}
                 </div>
               </div>
-              <div>조회수: {post.view}</div>
+              <div className="post__view">조회수: {post.view}</div>
             </div>
             <ul className="post__option">
-              <li>
-                <button onClick={editPost}>
-                  수정
-                </button>
-              </li>
-              <li>
-                <button onClick={deletePost}>
-                  삭제
-                </button>
-              </li>
+            {post.loginId === post.userId && ( // loginId와 userId가 같으면
+              <>
+                <li>
+                  <button onClick={editPost}>
+                    수정
+                  </button>
+                </li>
+                <li>
+                  <button onClick={deletePost}>
+                    삭제
+                  </button>
+                </li>
+              </>
+            )}
             </ul>
           </div>
           <div className="post__title">{post.title}</div>

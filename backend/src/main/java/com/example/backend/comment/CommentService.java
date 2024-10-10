@@ -26,9 +26,9 @@ public class CommentService {
 
     @Transactional
     public CommentResponse createComment(CommentRequest commentRequest) {
-        //임시설정
-        User user = userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Invalid parent user ID"));
+        User user = userRepository.findById(commentRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("Invalid parent user ID"));
         Post post = postRepository.findById(commentRequest.getPostId()).orElseThrow(() -> new IllegalArgumentException("Invalid parent post ID"));
+
         Comment parentComment = null;
         if (commentRequest.getParentId() != null) { // 자식 댓글이라면
             //부모 Comment를 찾음
@@ -46,10 +46,10 @@ public class CommentService {
 
         // 자식 댓글 리스트를 DTO로 변환
         List<CommentResponse> children = savedComment.getChildrenComment().stream()
-                .map(child -> CommentResponse.toDto(child, null))
+                .map(child -> CommentResponse.toDto(child, null, null))
                 .collect(Collectors.toList());
 
-        return CommentResponse.toDto(savedComment, children);
+        return CommentResponse.toDto(savedComment, children, null);
     }
 
     @Transactional

@@ -51,7 +51,8 @@ public class Post {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
     @Column(name = "is_edited")
-    private boolean isEdited = false;
+//    private boolean isEdited = false;
+    private Boolean isEdited = false;
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
     @Column(name = "like_count", columnDefinition = "integer default 0")

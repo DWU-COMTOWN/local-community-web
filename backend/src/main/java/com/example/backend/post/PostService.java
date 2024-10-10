@@ -56,9 +56,7 @@ public class PostService {
 
     @Transactional
     public PostResponse createPost(PostRequest postRequest, List<MultipartFile> imageFiles) throws IOException {
-        // 아직 유저 연결 X -> 임시로 1L로 설정
-        // User user = userRepository.findById(postRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        User user = userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+        User user = userRepository.findById(postRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Category category = categoryRepository.findById(postRequest.getCategoryId()).orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
         Post post = new Post(postRequest.getTitle(), postRequest.getContent(), user, category);
         Post savedPost = postRepository.save(post);
@@ -77,13 +75,13 @@ public class PostService {
                 }
             }
         }
-        return PostResponse.toDto(savedPost, false, false,null, imageResponses);
+        return PostResponse.toDto(savedPost, false, false,null, imageResponses, null);
     }
     @Transactional(readOnly = true)
-    public PostResponse getPostById(Long postId, Long userId) {
+    public PostResponse getPostById(Long postId, Long loginId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
-        Boolean isLiked = postLikeService.isLiked(userId, postId);
-        Boolean isScrapped = postScrapService.isScrapped(userId, postId);
+        Boolean isLiked = postLikeService.isLiked(loginId, postId);
+        Boolean isScrapped = postScrapService.isScrapped(loginId, postId);
 
         List<PostImage> postImages = postImageRepository.findByPostId(postId);
         List<PostImageResponse> imageResponses = postImages.stream()
@@ -96,13 +94,13 @@ public class PostService {
         for (Comment comment : postComments) {
             List<Comment> replies = commentRepository.findByParentCommentId(comment.getId());
             List<CommentResponse> replyResponses = replies.stream()
-                    .map(reply -> CommentResponse.toDto(reply, null))
+                    .map(reply -> CommentResponse.toDto(reply, null, loginId))
                     .collect(Collectors.toList());
-            commentResponses.add(CommentResponse.toDto(comment, replyResponses));
+            commentResponses.add(CommentResponse.toDto(comment, replyResponses, loginId));
         }
 
         String redisKey = post.getId().toString();
-        String redisUserKey = userId.toString();
+        String redisUserKey = loginId.toString();
         String values = redisDao.getValues(redisKey);
         int views = 0;
         if (values != null) {
@@ -119,7 +117,7 @@ public class PostService {
             redisDao.setValues(redisKey, String.valueOf(views));
         }
         post.setView(views);
-        return PostResponse.toDto(post, isScrapped, isLiked, commentResponses, imageResponses);
+        return PostResponse.toDto(post, isScrapped, isLiked, commentResponses, imageResponses, loginId);
     }
 
     @Transactional(readOnly = true)

@@ -1,4 +1,4 @@
-USE found1;
+USE found;
 CREATE TABLE IF NOT EXISTS Board (
                        id INT AUTO_INCREMENT PRIMARY KEY,
                        title VARCHAR(255),

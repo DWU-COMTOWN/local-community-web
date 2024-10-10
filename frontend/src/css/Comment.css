@@ -55,7 +55,7 @@
   align-items: center; /* 수직 가운데 정렬 (선택 사항) */
   border: 1px solid #ced4da;
   border-right: none;
-  margin: 5px -10px 0px 30px;
+  margin: 8px -10px 8px 30px;
   /*위 오른쪽 아래 왼쪽*/
   background-color: #f8f9fa;
   padding: 5px;
@@ -72,12 +72,12 @@
 }
 
 .editComment button {
-  padding: 8px;
+  padding: 6px 10px;
   cursor: pointer;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
   border-radius: 4px;
-  color: grey;
+  color: rgb(103, 102, 102);
 }
 
 .comment__content {

@@ -33,10 +33,21 @@ function LeftMenu(props) {
                         <input type="button" className="move" value="회원가입" />
                         <br/><br/><br/>
 
-                        <div className="mymenu"><a href="#" className="txt2">나의 글</a></div><br/>
-                        <div className="mymenu"><a href="#" className="txt2">나의 댓글</a></div><br/>
-                        <div className="mymenu"><a href="#" className="txt2">좋아요한 글</a></div><br/>
-                        <div className="mymenu"><a href="#" className="txt2">스크랩한 글</a></div><br/>
+                        <Link to='/myinfo'>
+                            <div className="mymenu">마이페이지</div>
+                            <br/>
+                        </Link>
+                        <Link to='/mypost'>
+                            <div className="mymenu">내가 쓴 글</div>
+                            <br/>
+                        </Link><Link to='/mycomment'>
+                        <div className="mymenu">내가 댓글 단 글</div>
+                        <br/>
+                        </Link>
+                        <Link to='/bookmark'>
+                            <div className="mymenu">북마크</div>
+                            <br/>
+                        </Link>
 
                         <br/><br/>
 

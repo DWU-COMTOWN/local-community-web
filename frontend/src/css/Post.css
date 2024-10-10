@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   color: grey;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .post__option {
@@ -73,6 +73,11 @@
   color: inherit;
   font: inherit;
   cursor: pointer;
+}
+
+.post__view {
+  font-size: 13px;
+  color: grey;
 }
 
 .post__title, .post__content {
@@ -111,7 +116,7 @@
 .post__status {
   display: flex;
   list-style: none;
-  padding: 15px 0;
+  padding: 10px 0;
   gap: 10px;
   justify-content: flex-start;
 }
@@ -135,14 +140,14 @@
 }
 
 .post__btnContainer button {
-  padding: 5px;
-  width: 60px;
+  padding: 5px 12px;
   background-color: #F2F2F2;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   justify-content: flex-end;
   display: inline-block;
+  color: rgb(103, 102, 102);
 }
 
 .writeComment {
@@ -163,14 +168,14 @@
 }
 
 .post__submit {
-  padding: 8px;
-  width: 50px;
+  padding: 6px 10px;
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
   border-radius: 5px;
   cursor: pointer;
   justify-content: flex-end;
   display: inline-block;
+  color: rgb(103, 102, 102);
 }
 
 @media (max-width: 600px) {

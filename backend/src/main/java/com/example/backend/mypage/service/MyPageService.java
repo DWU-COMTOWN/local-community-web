@@ -1,24 +1,20 @@
 package com.example.backend.mypage.service;
 
-
+import com.example.backend.comment.Comment;
 import com.example.backend.comment.CommentDto;
 import com.example.backend.comment.CommentRepository;
 import com.example.backend.comment_like.CommentLike;
 import com.example.backend.comment_like.CommentLikeDto;
 import com.example.backend.comment_like.CommentLikeRepository;
-
 import com.example.backend.post.Post;
 import com.example.backend.post.PostDto;
 import com.example.backend.post.PostRepository;
-import com.example.backend.post.PostResponse;
 import com.example.backend.post_like.PostLike;
 import com.example.backend.post_like.PostLikeDto;
 import com.example.backend.post_like.PostLikeRepository;
-
 import com.example.backend.post_scrap.PostScrap;
 import com.example.backend.post_scrap.PostScrapDto;
 import com.example.backend.post_scrap.PostScrapRepository;
-import com.example.backend.post_scrap.PostScrapRequest;
 import com.example.backend.user.User;
 import com.example.backend.user.UserDto;
 import com.example.backend.user.UserRepository;
@@ -28,9 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MyPageService { // 클래스 이름과 생성자 이름을 동일하게 수정
-
-
+public class MyPageService {
 
     private final PostLikeRepository postLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
@@ -48,24 +42,17 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
         this.postScrapRepository = postScrapRepository;
     }
 
-    //User정보 불러오기
-    public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
-        UserDto userDto = new UserDto();
-        userDto.setUserId(user.getUserId());
-        userDto.setUsername(user.getUsername());
-        userDto.setAddress(user.getAddress());
-        userDto.setPhone(user.getPhone());
-        userDto.setEmail(user.getEmail());
-        userDto.setNickname(user.getNickname());
-        return userDto;
+    //User 정보 불러오기
+    public UserDto getUserById(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
+        return convertToDto(user);
     }
 
-    //User정보 수정하기
-    public UserDto updateUser(Long userId, UserDto userDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    //User 정보 수정하기
+    public UserDto updateUser(String userId, UserDto userDto) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
 
         user.setUsername(userDto.getUsername());
         user.setAddress(userDto.getAddress());
@@ -74,7 +61,6 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
         user.setNickname(userDto.getNickname());
 
         userRepository.save(user);
-
         return convertToDto(user);
     }
 
@@ -89,37 +75,12 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
         return userDto;
     }
 
-    //본인이 좋아요 한 글 불러오기
-    public List<PostLikeDto> getLikePostsByUserId(Long userId) {
-        List<PostLike> postLikes = postLikeRepository.findByUserId(userId);
-        return postLikes.stream()
-                .map(postLike -> {
-                    PostLikeDto dto = new PostLikeDto();
-                    dto.setPostId(postLike.getPost().getId());
-                    dto.setPostTitle(postLike.getPost().getTitle());
-                    dto.setPostContent(postLike.getPost().getContent());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
 
-    //본인이 좋아요한 댓글 불러오기
-    public List<CommentLikeDto> getLikeCommentsByUserId(Long userId) {
-        List<CommentLike> commentLikes = commentLikeRepository.findByUserId(userId);
-        return commentLikes.stream()
-                .map(commentLike -> {
-                    CommentLikeDto dto = new CommentLikeDto();
-                    dto.setCommentId(commentLike.getComment().getId());
-                    dto.setCommentContent(commentLike.getComment().getContent());
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
 
     //본인이 작성한 글 불러오기
-    public List<PostDto> getPostsByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    public List<PostDto> getPostsByUserId(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
         return postRepository.findByUser(user)
                 .stream()
                 .map(post -> new PostDto(
@@ -134,13 +95,10 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
                 .collect(Collectors.toList());
     }
 
-
-
     //본인이 작성한 댓글 불러오기
-    public List<CommentDto> getCommentsByUserId(Long userId)
-    {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    public List<CommentDto> getCommentsByUserId(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
         return commentRepository.findByUser(user)
                 .stream()
                 .map(comment -> new CommentDto(
@@ -152,10 +110,31 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
                 .collect(Collectors.toList());
     }
 
+    //본인이 작성한 댓글이 달린 글 불러오기
+    public List<PostDto> getCommentedPostsByUserId(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
+        List<Comment> comments = commentRepository.findByUser(user);
+
+        return comments.stream()
+                .map(comment -> comment.getPost())
+                .distinct()
+                .map(post -> new PostDto(
+                        post.getId(),
+                        post.getTitle(),
+                        post.getContent(),
+                        post.getCreatedDate(),
+                        post.getModifiedDate(),
+                        post.getUser().getUsername(),
+                        post.getComments().size()
+                ))
+                .collect(Collectors.toList());
+    }
+
     //본인이 스크랩한 글 불러오기
-    public List<PostScrapDto> getScrappedPostsByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    public List<PostScrapDto> getScrappedPostsByUserId(String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with userId: " + userId));
         return postScrapRepository.findByUser(user)
                 .stream()
                 .map(postScrap -> new PostScrapDto(
@@ -164,10 +143,8 @@ public class MyPageService { // 클래스 이름과 생성자 이름을 동일�
                         postScrap.getPost().getContent(),
                         postScrap.getPost().getCreatedDate(),
                         postScrap.getPost().getModifiedDate(),
-                        postScrap.getPost().getUser().getUsername() // Original poster's username
+                        postScrap.getPost().getUser().getUsername()
                 ))
                 .collect(Collectors.toList());
     }
-
 }
-

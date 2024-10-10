@@ -7,33 +7,38 @@
 *.class
 
 # Node.js/React 관련 (React)
-/node_modules/
-/dist/
-/build/
+ /node_modules/
+ /dist/
+ /build/
 
 # 환경 설정 파일
-.env
-application.properties
-application.yml
+ .env
+ application.properties
+ application.yml
 
 # 로그 파일
-*.log
-spring.log
+ *.log
+ spring.log
 
 # IntelliJ IDEA 관련 파일
-/.idea/
-/*.iml
-/out/
+ /.idea/
+ /*.iml
+ /out/
 
 # OS 관련 파일
-.DS_Store
-Thumbs.db
+ .DS_Store
+ .Spotlight-V100
+ .Trashes
+ Thumbs.db
 
 # 캐시 및 임시 파일
-/cache/
-/tmp/
-/*.tmp
-*.swp
+ /cache/
+ /tmp/
+ /*.tmp
+ *.swp
 
 # Git 관련
-.git/
+ .git/
+
+# Gradle 관련
+.gradle/

@@ -1,10 +1,12 @@
 package com.example.backend.post;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PostListResponse {
     private Long postId;
     private String nickname;

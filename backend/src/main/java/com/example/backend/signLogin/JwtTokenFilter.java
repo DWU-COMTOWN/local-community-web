@@ -54,6 +54,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
             String userId = JwtTokenUtil.getuserId(token);
 
+            System.out.println("Extracted userId from token: " + userId);
+
             User loginUser = userService.getLoginUserByuserId(userId);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

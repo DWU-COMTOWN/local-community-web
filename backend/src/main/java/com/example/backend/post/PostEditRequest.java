@@ -20,4 +20,5 @@ public class PostEditRequest {
     private boolean isScrapped;
     @JsonProperty("isLiked")
     private boolean isLiked;
+    private Long categoryId;
 }
