@@ -1,9 +1,10 @@
 # 빌드 아티팩트 (Spring Boot)
- /target/
- /build/
- *.jar
- *.war
- *.class
+/target/
+/build/
+/.gradle/
+*.jar
+*.war
+*.class
 
 # Node.js/React 관련 (React)
  /node_modules/
