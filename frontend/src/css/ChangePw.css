@@ -1,0 +1,55 @@
+.noticeTitle{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.notice{
+    font-size: 13px;
+    text-align: center;
+}
+
+.ChangePw_errorMessage{
+    color: red;
+    font-size: 10px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.ChangePw_inputWrap {
+    width: 220px;
+    margin-top: 5px;
+    margin-bottom: 3px;
+    border-radius: 0;
+    padding: 10px;
+    border: 1px solid #a2a1a1;
+}
+
+.ChangePw_btnWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ChangePw_btn {
+    margin-top: 5px;
+    border: none;
+    background-color: #53b463;
+    color: white;
+    cursor: pointer;
+    height: 41px;
+    width: 220px;
+    font-size: 13px;
+    align-items: center;
+    text-align: center;
+}
+
+.ChangePw_smallMsg{
+    font-size: 13px;
+}
+
+.infoMessage {
+    color: #909090;
+    font-size: 12px;
+}

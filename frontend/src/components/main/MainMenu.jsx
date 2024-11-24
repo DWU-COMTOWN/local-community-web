@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import '../../css/Main.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const TopMenuWrapper = styled.div`
     display: flex;
@@ -29,20 +29,26 @@ function MainMenu(props) {
             <TopMenuWrapper>
                 <nav id="topMenu">
                     <ul>
-                        <li className="topMenuLi"> <a className="menuLink" href="#">About us</a></li>
+                        <li className="topMenuLi">
+                            <Link className="menuLink" to="/about">About us</Link>
+                        </li>
                         <li>|</li>
                         <li className="topMenuLi"><a className="menuLink">Comunity</a>
                             <ul className="submenu">
-                                <li><a target="middle" className="submenuLink longLink" onClick={() => handleClick(4, "자유")}>자유 게시판</a></li>
-                                <li><a className="submenuLink longLink" onClick={() => handleClick(5, "정보")}>정보 게시판</a></li>
-                                <li><a className="submenuLink longLink" onClick={() => handleClick(6, "홍보")}>홍보 게시판</a></li>
+                                <li><a target="middle" className="submenuLink longLink"
+                                       onClick={() => handleClick(4, "자유")}>자유 게시판</a></li>
+                                <li><a className="submenuLink longLink" onClick={() => handleClick(5, "정보")}>정보 게시판</a>
+                                </li>
+                                <li><a className="submenuLink longLink" onClick={() => handleClick(6, "홍보")}>홍보 게시판</a>
+                                </li>
                             </ul>
                         </li>
                         <li>|</li>
                         <li className="topMenuLi"><a className="menuLink">Review</a>
                             <ul className="submenu">
                                 <li><a className="submenuLink" onClick={() => handleClick(7, "식당")}>식당</a></li>
-                                <li><a className="submenuLink" onClick={() => handleClick(8, "카페·베이커리")}>카페·베이커리</a></li>
+                                <li><a className="submenuLink" onClick={() => handleClick(8, "카페·베이커리")}>카페·베이커리</a>
+                                </li>
                                 <li><a className="submenuLink" onClick={() => handleClick(9, "의료")}>의료</a></li>
                                 <li><a className="submenuLink" onClick={() => handleClick(10, "패션·미용")}>패션·미용</a></li>
                                 <li><a className="submenuLink" onClick={() => handleClick(11, "동물")}>동물</a></li>

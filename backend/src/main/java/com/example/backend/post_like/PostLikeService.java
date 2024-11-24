@@ -11,18 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PostLikeService {
-    @Autowired
-    private PostLikeRepository postLikeRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public PostLikeService(PostLikeRepository postLikeRepository, PostRepository postRepository, UserRepository userRepository) {
+        this.postLikeRepository = postLikeRepository;
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 
     @Transactional
     public void likePost(Long userId, Long postId) {
-        //임시 설정
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
         PostLike postLike = new PostLike(user, post);

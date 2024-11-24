@@ -10,14 +10,12 @@ import com.example.backend.config.S3Service;
 import com.example.backend.post_image.PostImage;
 import com.example.backend.post_image.PostImageRepository;
 import com.example.backend.post_image.PostImageResponse;
-import com.example.backend.post_like.PostLikeRepository;
 import com.example.backend.post_like.PostLikeService;
 import com.example.backend.post_scrap.PostScrapService;
 import com.example.backend.user.User;
 import com.example.backend.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
@@ -33,32 +31,32 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostService {
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
+    private final PostImageRepository postImageRepository;
+    private final S3Service s3Service;
+    private final PostLikeService postLikeService;
+    private final PostScrapService postScrapService;
+    private final RedisDao redisDao;
+
     @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    @Autowired
-    private PostLikeRepository postLikeRepository;
-    @Autowired
-    private CommentRepository commentRepository;
-    @Autowired
-    private PostImageRepository postImageRepository;
-    @Autowired
-    private S3Service s3Service;
-    @Autowired
-    private PostLikeService postLikeService;
-    @Autowired
-    private PostScrapService postScrapService;
-    @Autowired
-    private RedisDao redisDao;
+    public PostService(PostRepository postRepository, UserRepository userRepository, CategoryRepository categoryRepository, CommentRepository commentRepository, PostImageRepository postImageRepository, S3Service s3Service, PostLikeService postLikeService, PostScrapService postScrapService, RedisDao redisDao) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.commentRepository = commentRepository;
+        this.postImageRepository = postImageRepository;
+        this.s3Service = s3Service;
+        this.postLikeService = postLikeService;
+        this.postScrapService = postScrapService;
+        this.redisDao = redisDao;
+    }
 
     @Transactional
     public PostResponse createPost(PostRequest postRequest, List<MultipartFile> imageFiles) throws IOException {
-        // 아직 유저 연결 X -> 임시로 1L로 설정
-        // User user = userRepository.findById(postRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
-        User user = userRepository.findById(1L).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
+        User user = userRepository.findById(postRequest.getUserId()).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));
         Category category = categoryRepository.findById(postRequest.getCategoryId()).orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
         Post post = new Post(postRequest.getTitle(), postRequest.getContent(), user, category);
         Post savedPost = postRepository.save(post);
@@ -77,13 +75,14 @@ public class PostService {
                 }
             }
         }
-        return PostResponse.toDto(savedPost, false, false,null, imageResponses);
+        return PostResponse.toDto(savedPost, false, false,null, imageResponses, user.getId());
     }
+
     @Transactional(readOnly = true)
-    public PostResponse getPostById(Long postId, Long userId) {
+    public PostResponse getPostById(Long postId, Long loginId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
-        Boolean isLiked = postLikeService.isLiked(userId, postId);
-        Boolean isScrapped = postScrapService.isScrapped(userId, postId);
+        boolean isLiked = postLikeService.isLiked(loginId, postId);
+        boolean isScrapped = postScrapService.isScrapped(loginId, postId);
 
         List<PostImage> postImages = postImageRepository.findByPostId(postId);
         List<PostImageResponse> imageResponses = postImages.stream()
@@ -96,13 +95,13 @@ public class PostService {
         for (Comment comment : postComments) {
             List<Comment> replies = commentRepository.findByParentCommentId(comment.getId());
             List<CommentResponse> replyResponses = replies.stream()
-                    .map(reply -> CommentResponse.toDto(reply, null))
+                    .map(reply -> CommentResponse.toDto(reply, null, loginId))
                     .collect(Collectors.toList());
-            commentResponses.add(CommentResponse.toDto(comment, replyResponses));
+            commentResponses.add(CommentResponse.toDto(comment, replyResponses, loginId));
         }
 
-        String redisKey = post.getId().toString();
-        String redisUserKey = userId.toString();
+        String redisKey = "post:" + post.getId().toString();
+        String redisUserKey = "user:" + loginId.toString();
         String values = redisDao.getValues(redisKey);
         int views = 0;
         if (values != null) {
@@ -111,15 +110,14 @@ public class PostService {
             values = "0";
         }
 
-        // 유저를 key로 조회한 게시글 ID List안에 해당 게시글 ID가 포함되어 있지 않는다면,
         if(!redisDao.getValuesList(redisUserKey).contains(redisKey)) {
-            redisDao.setValuesList(redisUserKey, redisKey); // 유저 key로 해당 글 ID를 List 형태로 저장
+            redisDao.setValuesList(redisUserKey, redisKey);
             redisDao.setKeyExpiry(redisUserKey, Duration.ofHours(24));
             views = Integer.parseInt(values) + 1;
             redisDao.setValues(redisKey, String.valueOf(views));
         }
         post.setView(views);
-        return PostResponse.toDto(post, isScrapped, isLiked, commentResponses, imageResponses);
+        return PostResponse.toDto(post, isScrapped, isLiked, commentResponses, imageResponses, loginId);
     }
 
     @Transactional(readOnly = true)
@@ -128,31 +126,37 @@ public class PostService {
         Page<Post> posts = postRepository.findByCategoryId(categoryId, pageable);
         return posts.map(PostListResponse::toDto);
     }
+
     @Transactional(readOnly = true)
     public Page<PostListResponse> searchPostsByCategoryId(Long categoryId, String keyword, Pageable pageable) {
         Page<Post> posts = postRepository.findByCategoryIdAndKeyword(categoryId, keyword, pageable);
         return posts.map(PostListResponse::toDto);
     }
+
     @Transactional(readOnly = true)
     public Page<PostListResponse> searchPosts(String keyword, Pageable pageable) {
         Page<Post> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword, pageable);
         return posts.map(PostListResponse::toDto);
     }
+
     @Transactional(readOnly = true)
     public List<PostListResponse> getPostsByView() {
         List<Post> posts = postRepository.findTop20ByViewGreaterThanOrderByViewDesc(1);
         return posts.stream().map(PostListResponse::toDto).collect(Collectors.toList());
     }
+
     @Transactional(readOnly = true)
     public List<PostListResponse> getPostsByLikeCount() {
         List<Post> posts = postRepository.findTop20ByLikeCountGreaterThanOrderByLikeCountDesc(0);
         return posts.stream().map(PostListResponse::toDto).collect(Collectors.toList());
     }
+
     @Transactional(readOnly = true)
     public List<PostListResponse> getPostsByCommentCount() {
         List<Post> posts = postRepository.findTop20ByCommentCountGreaterThanOrderByCommentCountDesc(0);
         return posts.stream().map(PostListResponse::toDto).collect(Collectors.toList());
     }
+
     @Transactional
     public Long update(Long postId, PostEditRequest postEditRequest, List<MultipartFile> imageFiles) throws Exception {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
@@ -189,6 +193,7 @@ public class PostService {
         post.update(postEditRequest.getTitle(), postEditRequest.getContent(), postEditRequest.isEdited());
         return postId;
     }
+
     @Transactional
     public void delete(Long postId) throws Exception {
         Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
@@ -200,6 +205,7 @@ public class PostService {
         redisDao.deleteValues(postId.toString());
         postRepository.delete(post);
     }
+
     @Transactional
     public void deleteS3Image(List<String> imageUrls) throws Exception {
         for (String imageUrl : imageUrls) {

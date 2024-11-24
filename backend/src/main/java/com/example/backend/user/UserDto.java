@@ -12,4 +12,7 @@ public class UserDto {
     private String phone;
     private String email;
     private String nickname;
+    private String profile_url;
+    private String kakaoUser;
+
 }

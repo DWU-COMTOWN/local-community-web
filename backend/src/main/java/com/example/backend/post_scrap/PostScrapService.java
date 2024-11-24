@@ -12,14 +12,16 @@ import java.util.Optional;
 
 @Service
 public class PostScrapService {
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+    private final PostScrapRepository postScrapRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PostRepository postRepository;
-    @Autowired
-    private PostScrapRepository postScrapRepository;
+    public PostScrapService(UserRepository userRepository, PostRepository postRepository, PostScrapRepository postScrapRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.postScrapRepository = postScrapRepository;
+    }
 
     public int getScrapCountByPostId(Long postId) {
         return postScrapRepository.findByPostId(postId).size();
@@ -31,6 +33,7 @@ public class PostScrapService {
         PostScrap newScrap = new PostScrap(user, post);
         postScrapRepository.save(newScrap);
     }
+
     @Transactional
     public void unscrapPost(Long userId, Long postId) {
         postScrapRepository.deleteByUserIdAndPostId(userId, postId);
@@ -38,5 +41,4 @@ public class PostScrapService {
     public boolean isScrapped(Long userId, Long postId) {
         return postScrapRepository.findByUserIdAndPostId(userId, postId).isPresent();
     }
-
 }

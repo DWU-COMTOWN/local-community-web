@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -51,7 +53,8 @@ public class Post {
     @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
     @Column(name = "is_edited")
-    private boolean isEdited = false;
+//    private boolean isEdited = false;
+    private Boolean isEdited = false;
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int view;
     @Column(name = "like_count", columnDefinition = "integer default 0")

@@ -1,6 +1,5 @@
 package com.example.backend.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -17,6 +16,7 @@ public class RedisDao {
     public RedisDao(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
+
     public void setValues(String key, String data) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         values.set(key, data);
@@ -31,11 +31,6 @@ public class RedisDao {
         return len == 0 ? new ArrayList<>() : redisTemplate.opsForList().range(key, 0, len-1);
     }
 
-    public void setValues(String key, String data, Duration duration) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(key, data, duration);
-    }
-
     public String getValues(String key) {
         ValueOperations<String, String> values = redisTemplate.opsForValue();
         return values.get(key);
@@ -45,8 +40,9 @@ public class RedisDao {
         redisTemplate.expire(key, duration);
     }
 
-    public Set<String> getAllKeys() {
-        return redisTemplate.keys("*");
+    public Set<String> getAllKeys(String pattern) {
+        Set<String> keys = redisTemplate.keys(pattern);
+        return keys;
     }
 
     public void deleteValues(String key) {

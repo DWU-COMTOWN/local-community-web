@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import '../../css/Main.css';
 
@@ -27,11 +27,60 @@ const TitleDiv = styled.div`
 function MainTitle(props) {
     const {} = props;
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isKakaoUser, setIsKakaoUser] = useState(false);
+
+    useEffect(() => {
+        fetch("/jwt-login/check-auth", {
+            method: "GET",
+            credentials: "include",
+        })
+            .then(response => response.json())
+            .then(data => {
+                setIsLoggedIn(data.isAuth);
+                setIsKakaoUser(data.kakaoUser);
+            })
+            .catch(error => {
+                console.error("Error: ", error);
+            });
+    }, []);
+
+    const handleLogout = () => {
+        fetch("/jwt-login/logout", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(response => {
+                if(response.ok) {
+                    alert("로그아웃 성공");
+                    window.location.href = "/";
+                } else {
+                    alert("로그아웃 실패");
+                }
+            }).catch(error => {
+            console.error("Error: ", error);
+            alert("에러 발생");
+        });
+    };
+
     return (
         <>
             <TopWrapper>
-                <div><a className="topBox" href="#">로그인</a></div>
-                <div><a className="topBox" href="#">회원가입</a></div>
+                {/*<div><a className="topBox" href="/jwt-login/login">로그인</a></div>
+                <div><a className="topBox" href="/jwt-login/join">회원가입</a></div>
+                <div><a className="topBox" onChange={handleLogout}>로그아웃</a> </div>
+*/}
+                {isLoggedIn ? (
+                    <div><a className="topBox" onClick={handleLogout}>로그아웃</a></div>
+                ) : (
+                    <>
+                        <div><a className="topBox" href="/jwt-login/login">로그인</a></div>
+                        <div><a className="topBox" href="/jwt-login/join">회원가입</a></div>
+                    </>
+                )}
             </TopWrapper>
             <hr/>
             <TitleWrapper>

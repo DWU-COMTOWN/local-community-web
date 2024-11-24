@@ -1,5 +1,8 @@
 import {Route, Routes} from "react-router-dom";
 import MainPage from "./pages/main/MainPage";
+import ChangePW from "./pages/user/ChangePw"
+import FindPw from "./pages/user/FindPw"
+import FindId from "./pages/user/FindId";
 import Login from "./pages/user/Login";
 import SignUp from "./pages/user/SignUp";
 import MyInfo from "./pages/my/MyInfo"
@@ -13,14 +16,21 @@ import Write from './pages/post/Write';
 import Edit from "./pages/post/Edit";
 import Search from "./pages/main/Search";
 import BestPosts from "./pages/main/BestPosts";
-
+import AboutUs from "./components/main/AboutUs";
 function App(props) {
     return (
         <>
             <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
+                <Route path="/"  element={<MainPage />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/jwt-login/change-pw" element={<ChangePW/>} />
+                <Route path="/jwt-login/find-pw" element={<FindPw/>} />
+                <Route path="/jwt-login/find-id" element={<FindId/>} />
+                <Route path="/jwt-login/login" element={<Login/>}/>
+                <Route path="/jwt-login/join" element={<SignUp/>}/>
+                {/*                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />*/}
+
                 <Route path="/myInfo" element={<MyInfo />} />
                 <Route path="/myPost" element={<MyPost />} />
                 <Route path="/myComment" element={<MyComment />} />

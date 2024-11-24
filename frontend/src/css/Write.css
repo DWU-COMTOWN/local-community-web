@@ -75,6 +75,7 @@ textarea {
   justify-content: flex-end;
   display: inline-block;
   float: right;
+  color: rgb(103, 102, 102);
 }
 
 /* 미디어 쿼리로 반응형 디자인 추가 */

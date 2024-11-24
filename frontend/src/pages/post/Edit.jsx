@@ -92,6 +92,7 @@ export default function Edit() {
         `http://localhost:8080/post/${postId}`,
         formData,
         {
+          withCredentials: true,
           headers: {
             "Content-Type": "multipart/form-data",
           },

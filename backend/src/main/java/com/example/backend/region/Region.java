@@ -2,6 +2,8 @@ package com.example.backend.region;
 
 import com.example.backend.user.User;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Region {

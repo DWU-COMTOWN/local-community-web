@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import '../../css/Main.css';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Wrapper = styled.div`
     height: 750px;
@@ -11,66 +12,96 @@ const Wrapper = styled.div`
 
 function BestBoard(props) {
     const {} = props;
-
     const navigate = useNavigate();
+    const [bestPosts, setBestPosts] = useState([[]]);
 
     const handleClick = (category) => {
         navigate(`/bestPosts`, { state: { category: category } });
     };
 
-    return (
-        <>
-            <Wrapper>
-                <div className="rightmenu">
-                    <center>
-                        <br/>
-                        <br/><br/>
-                        <table border="1" className="table1">
-                            <tbody>
-                                <tr>
-                                    <td height="40px" className="tabletitle" onClick={() => handleClick("조회")}>best 조회 게시글</td>
-                                </tr>
-                                <tr>
-                                    <td>워녕: 긴급재난지원금, 정부지원금 정리 딱 해드립니다 이것만 보세요···</td>
-                                </tr>
-                                <tr>
-                                    <td>유비: 산에서 멧돼지 내려왔네요 위험할뻔 했는데 다행히···</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
-                        <table border="1" className="table1">
-                            <tbody>
-                                <tr>
-                                    <td height="40px" className="tabletitle" onClick={() => handleClick("추천")}>best 추천 게시글</td>
-                                </tr>
-                                <tr>
-                                    <td>지디: 밀폐된 실내에서만큼은 마스크 꼭 써주세요 부탁드립니다···</td>
-                                </tr>
-                                <tr>
-                                    <td>혜구: 핸드폰 잃어버렸는데 찾아주신 분 너무 감사드립니다 마음이 따뜻···</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
-                        <table border="1" className="table1">
-                            <tbody>
-                                <tr>
-                                    <td height="40px" className="tabletitle" onClick={() => handleClick("댓글")}>best 댓글 수 게시글</td>
-                                </tr>
-                                <tr>
-                                    <td>피치: 구리에서 편의시설 가장 많은 동네 어딘가요?···</td>
-                                </tr>
-                                <tr>
-                                    <td>몽자: 층간소음 문제로 이웃과 말싸움했습니다 누구 잘못인가요??···</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </center>
-                </div>
-            </Wrapper>
-        </>
-    );
+    const navigateToPost = (postId) => {
+        navigate(`/post/${postId}`);
+    };
+
+        useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`/category/recent-posts/best`);
+                setBestPosts(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error("Failed to fetch recent posts:", error);
+            }
+        };
+        fetchData();
+        }, []);
+
+        return (
+            <>
+                <Wrapper>
+                    <div className="rightmenu">
+                        <center>
+                            <br />
+                            <br />
+                            <br />
+                            <table className="table1">
+                                <tbody>
+                                    <tr>
+                                        <td className="tabletitle" onClick={() => handleClick("조회")}>best 조회 게시글</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[0] && navigateToPost(bestPosts[0].postId)}>
+                                            {bestPosts[0] ? `${bestPosts[0].nickname}: ${bestPosts[0].title}` : ""}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[1] && navigateToPost(bestPosts[1].postId)}>
+                                            {bestPosts[1] ? `${bestPosts[1].nickname}: ${bestPosts[1].title}` : ""}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <table className="table1">
+                                <tbody>
+                                    <tr>
+                                        <td className="tabletitle" onClick={() => handleClick("추천")}>best 추천 게시글</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[2] && navigateToPost(bestPosts[2].postId)}>
+                                            {bestPosts[2] ? `${bestPosts[2].nickname}: ${bestPosts[2].title}` : ""}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[3] && navigateToPost(bestPosts[3].postId)}>
+                                            {bestPosts[3] ? `${bestPosts[3].nickname}: ${bestPosts[3].title}` : ""}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <table className="table1">
+                                <tbody>
+                                    <tr>
+                                        <td className="tabletitle" onClick={() => handleClick("댓글")}>best 댓글 수 게시글</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[4] && navigateToPost(bestPosts[4].postId)}>
+                                            {bestPosts[4] ? `${bestPosts[4].nickname}: ${bestPosts[4].title}` : ""}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="pointer" onClick={() => bestPosts[5] && navigateToPost(bestPosts[5].postId)}>
+                                            {bestPosts[5] ? `${bestPosts[5].nickname}: ${bestPosts[5].title}` : ""}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                    </div>
+                </Wrapper>
+            </>
+        );
 }
 
 export default BestBoard;

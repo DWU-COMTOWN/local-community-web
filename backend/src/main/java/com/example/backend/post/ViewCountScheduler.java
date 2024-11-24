@@ -11,25 +11,25 @@ import java.util.Set;
 
 @Component
 public class ViewCountScheduler {
-
-    @Autowired
     private final RedisDao redisDao;
-    @Autowired
     private final PostRepository postRepository;
 
+    @Autowired
     public ViewCountScheduler(RedisDao redisDao, PostRepository postRepository) {
         this.redisDao = redisDao;
         this.postRepository = postRepository;
     }
+
     @Transactional
     @Scheduled(cron = "0 0 0 * * ?", zone = "Asia/Seoul")
     public void updateViewCounts() {
-        Set<String> redisKeys = redisDao.getAllKeys(); // 모든 게시물의 Redis 키 가져오기
+        Set<String> redisKeys = redisDao.getAllKeys("post:*"); // 모든 게시물의 Redis 키 가져오기
         for (String redisKey : redisKeys) {
             String redisValue = redisDao.getValues(redisKey);
             if (redisValue != null) {
                 int views = Integer.parseInt(redisValue);
-                Long postId = Long.parseLong(redisKey);
+                String postIdStr = redisKey.replace("post:", "");
+                Long postId = Long.parseLong(postIdStr);
                 Post post = postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
                 if (post != null) {
                     post.setView(views);
