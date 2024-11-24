@@ -22,8 +22,18 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
+            # 작업 디렉토리로 이동
             cd /home/ubuntu/local-community-web/frontend
-            git pull origin dev
+            
+            # 항상 원격 dev 브랜치를 기준으로 동기화
+            git fetch origin
+            git reset --hard origin/dev
+
+            # 의존성 설치
             npm install
+
+            # 프로젝트 빌드
             npm run build
+
+            # S3로 빌드 결과물 동기화
             aws s3 sync build/ s3://town-in-web-page --region ap-northeast-2 --delete
