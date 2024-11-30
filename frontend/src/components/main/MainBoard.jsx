@@ -54,7 +54,7 @@ function MainBoard(props) {
     return (
         <>
             <center>
-                <p/>
+                <br/>
                 <input 
                     type="text" 
                     className="input-style" 
@@ -74,7 +74,7 @@ function MainBoard(props) {
                             <table border="1" className="table1">
                                 <tbody>
                                     <tr>
-                                        <td className="tabletitle table-style" onClick={() => handleClick(4, "자유")}> 자유 게시판 (클릭하세요)</td>
+                                        <td className="tabletitle table-style" onClick={() => handleClick(4, "자유")}> 자유 게시판</td>
                                     </tr>
                                     <tr>
                                         <td 
