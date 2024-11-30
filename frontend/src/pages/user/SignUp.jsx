@@ -28,6 +28,7 @@ export default function SignUp() {
     pwMessage: "",
     pwCheckMessage: "",
     nameMessage: "",
+    nicknameCheckMessage: "",
     phoneMessage: "",
   };
 
@@ -39,6 +40,7 @@ export default function SignUp() {
     isPw: false,
     isPwCheck: false,
     isName: false,
+    isNicknameChecked: false,
     isPhone1: false,
     isPhone2: false,
     isPhone3: false,
@@ -187,7 +189,7 @@ export default function SignUp() {
 
     if(!phoneRegExp.test(currentPhone)) {
       setErrorMessage({ ...errorMessage, phoneMessage: "올바르지 않은 양식"});
-      setValidationState({ ...validationState, isPhone2: false});;
+      setValidationState({ ...validationState, isPhone2: false});
     } else {
       setErrorMessage({ ...errorMessage, phoneMessage: ""});
       setValidationState({ ...validationState, isPhone2: true});
@@ -246,8 +248,7 @@ export default function SignUp() {
         params: {userId: formValue.id}
       });
       const {success, message} = response.data;
-      console.log(success);
-      console.log(message);
+
       setErrorMessage({ ...errorMessage, idCheckMessage: message});
       setValidationState({ ...validationState, isIdChecked: success});
 
@@ -255,6 +256,24 @@ export default function SignUp() {
     } catch (error) {
       console.error("중복 확인 요청 실패: ", error);
       setErrorMessage({ ...errorMessage, idCheckMessage: "서버와 통신 오류"});
+    }
+  };
+
+  const handleCheckNickname = async () => {
+    try {
+      const response = await axios.get("/jwt-login/check-nickname", {
+        params: {nickname: formValue.nickname}
+      });
+
+      const {success, message} = response.data;
+
+      setErrorMessage({...errorMessage, nicknameCheckMessage: message});
+      setValidationState({...validationState, isNicknameChecked: success});
+
+      onAlert(message);
+    } catch(error) {
+      console.error("중복 확인 요청 실패: ", error);
+      setErrorMessage({...errorMessage, idCheckMessage: "서버와 통신 오류"});
     }
   };
 
@@ -322,32 +341,6 @@ export default function SignUp() {
                 </div>
               </>
           )}
-          {/*<div className="signup_inputTitle">아이디
-            <div className="errorMessage">{errorMessage.idMessage}</div>
-            <div>kakao userId : {userId}</div>
-          </div>
-          <div className="signup_inputWrap">
-          <input type="text" className="input" value={formValue.id} onChange={onChangeId} />
-            <button className="checkButton" disabled={!validationState.isId}
-                    onClick={() => {handleCheckId();}} >중복 확인</button>
-          </div>
-
-          <div className="signup_inputTitle">비밀번호
-            <div className="errorMessage">{errorMessage.pwMessage}</div>
-          </div>
-          <div className="signup_inputWrap">
-          <input type="password" className="input" value={formValue.pw}
-                 onChange={onChangePw} />
-          </div>
-
-          <div className="signup_inputTitle">비밀번호 확인
-            <div className="errorMessage"
-                  style={{color: validationState.isPwCheck ? '#53b463' : 'red'}}>
-              {errorMessage.pwCheckMessage}</div>
-          </div>
-          <div className="signup_inputWrap">
-          <input type="password" className="input" value={formValue.pwCheck} onChange={onChangePwCheck} />
-          </div>*/}
 
           <div className="signup_inputTitle">이름
             <div className="errorMessage">{errorMessage.nameMessage}</div>
@@ -359,6 +352,7 @@ export default function SignUp() {
           <div className="signup_inputTitle">닉네임</div>
           <div className="signup_inputWrap">
             <input type="text" className="input" value={formValue.nickname} onChange={(e) => setFormValue({ ...formValue, nickname: e.target.value})} />
+            <button className="checkButton" onClick={() => {handleCheckNickname();}}>중복 확인</button>
           </div>
 
           <div className="signup_inputTitle">주소 검색</div>

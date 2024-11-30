@@ -1,6 +1,8 @@
 package com.example.backend.category;
 
 import com.example.backend.comment.Comment;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,9 @@ public class Category {
     public String name;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_id")
+    @JsonBackReference
     private Category parentCategory;
     @OneToMany(mappedBy = "parentCategory", orphanRemoval = true)
+    @JsonManagedReference
     private List<Category> subCategories = new ArrayList<>();
 }

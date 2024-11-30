@@ -16,12 +16,13 @@ import Write from './pages/post/Write';
 import Edit from "./pages/post/Edit";
 import Search from "./pages/main/Search";
 import BestPosts from "./pages/main/BestPosts";
-
+import AboutUs from "./components/main/AboutUs";
 function App(props) {
     return (
         <>
             <Routes>
-                <Route path="/" element={<MainPage />} />
+                <Route path="/"  element={<MainPage />} />
+                <Route path="/about" element={<AboutUs />} />
                 <Route path="/jwt-login/change-pw" element={<ChangePW/>} />
                 <Route path="/jwt-login/find-pw" element={<FindPw/>} />
                 <Route path="/jwt-login/find-id" element={<FindId/>} />
@@ -29,6 +30,7 @@ function App(props) {
                 <Route path="/jwt-login/join" element={<SignUp/>}/>
                 {/*                <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />*/}
+
                 <Route path="/myInfo" element={<MyInfo />} />
                 <Route path="/myPost" element={<MyPost />} />
                 <Route path="/myComment" element={<MyComment />} />

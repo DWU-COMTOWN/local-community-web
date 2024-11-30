@@ -13,7 +13,6 @@ export default function Post() {
   const [post, setPost] = useState(location.state || null);
   const [commentInput, setCommentInput] = useState("");
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,14 +30,14 @@ export default function Post() {
           setCategory(categoryResponse.data);
         }
       } catch (err) {
-        console.log('Error fetching data:', err);
+        navigate("/jwt-login/login");
       }
     };
     fetchData();
   }, [postId]);
 
   if (!post) {
-    return <div>Loading...</div>; // 로딩 중 메시지
+    return <div>Loading...</div>;
   }
 
   const likePost = async () => {
@@ -46,12 +45,12 @@ export default function Post() {
       alert("내가 쓴 글은 추천할 수 없습니다.");
       return;
     }
-  
+
     if (post.isLiked) {
       alert("이미 이 글을 추천하셨습니다.");
       return;
     }
-  
+
     if (window.confirm("이 글을 추천하시겠습니까?")) {
       try {
         await axios.post(`http://localhost:8080/post/${postId}/like`, {}, {
@@ -63,27 +62,27 @@ export default function Post() {
       }
     }
   };
-  
+
   const scrapPost = async () => {
     if (post.loginId === post.userId) {
       alert("내가 쓴 글은 스크랩할 수 없습니다.");
       return;
     }
-  
+
     const confirmMessage = post.isScrapped
       ? "이 글의 스크랩을 취소하시겠습니까?"
       : "이 글을 스크랩하시겠습니까?";
-    
+
     if (window.confirm(confirmMessage)) {
       const endpoint = post.isScrapped
         ? `http://localhost:8080/post/${postId}/unscrap`
         : `http://localhost:8080/post/${postId}/scrap`;
-  
+
       try {
         await axios.post(endpoint, {}, {
           withCredentials: true
         });
-        
+
         window.location.reload();
       } catch (err) {
         console.error("Error scrapping post:", err);

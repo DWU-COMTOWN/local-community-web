@@ -108,7 +108,6 @@ export default function CommentItem({ item, postId, postWriter }) {
         await axios.post(`http://localhost:8080/comment/${commentId}/like`, {}, {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         });
-        
         window.location.reload();
       }
     } catch (err) {
@@ -156,9 +155,11 @@ export default function CommentItem({ item, postId, postWriter }) {
               </button>
             </li>
             <li>
-              <button onClick={(event) => likeComment(event, item.commentId)}>
-                추천
-              </button>
+              {!item.isDeleted && (
+                  <button onClick={(event) => likeComment(event, item.commentId)}>
+                    추천
+                  </button>
+              )}
             </li>
           </>
         )}
@@ -225,9 +226,11 @@ export default function CommentItem({ item, postId, postWriter }) {
                   </button>
                 </li>
                 <li>
-                  <button onClick={(event) => likeComment(event, child.commentId)}>
-                    추천
-                  </button>
+                  {!child.isDeleted && (
+                      <button onClick={(event) => likeComment(event, child.commentId)}>
+                        추천
+                      </button>
+                  )}
                 </li>
               </>
           )}

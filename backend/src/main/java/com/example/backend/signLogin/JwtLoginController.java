@@ -79,6 +79,21 @@ public class JwtLoginController {
         return response;
     }
 
+    @GetMapping("/check-nickname")
+    public Map<String, Object> checkNickname(@RequestParam(name = "nickname") String nickname) {
+        Map<String, Object> response = new HashMap<>();
+
+        if(userService.checkNicknameDuplicate(nickname)) {
+            response.put("success", false);
+            response.put("message", "이미 사용중인 닉네임입니다.");
+        } else {
+            response.put("success", true);
+            response.put("message", "사용 가능한 닉네임입니다.");
+        }
+
+        return response;
+    }
+
     @GetMapping("/check-kakaouser")
     public Map<String, Object> checkKakaoUser(@RequestParam(name = "kakaoUser") String kakaoUser) {
         Map<String, Object> response = new HashMap<>();

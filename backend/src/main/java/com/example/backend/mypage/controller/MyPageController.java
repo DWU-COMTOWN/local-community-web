@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -58,34 +60,57 @@ public class MyPageController {
         return myPageService.getUserById(userId);
     }
 
-//    @GetMapping("/posts")
-//    public List<PostDto> getPostsByUserId(HttpServletRequest request) {
-//        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-//        return myPageService.getPostsByUserId(userId);
-//    }
-
     @GetMapping("/posts")
-    public List<PostDto> getPostsByUserId(HttpServletRequest request,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "3") int size) {
-    String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-    return myPageService.getPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request); // 요청에서 쿠키로 userId 추출
+        List<PostDto> posts = myPageService.getPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getPostCountByUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/comments")
-    public List<PostDto> getCommentedPostsByUserId(HttpServletRequest request,
-                                                   @RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "3") int size) {
-        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.getCommentedPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getCommentedPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request);
+
+        // 댓글 게시글 페이징 처리
+        List<PostDto> posts = myPageService.getCommentedPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getCommentedPostCountByUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/scraps")
-    public List<PostScrapDto> getScrappedPostsByUserId(HttpServletRequest request,
-                                                       @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "3") int size) {
-        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.getScrappedPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getScrappedPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request);
+
+        // 스크랩한 게시글 페이징 처리
+        List<PostScrapDto> scraps = myPageService.getScrappedPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getScrappedPostCountByUser(userId);
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", scraps);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/user")
