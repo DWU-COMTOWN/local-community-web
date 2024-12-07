@@ -12,7 +12,7 @@ export default function BestPosts() {
   const fetchPosts = async () => {
     try {
       const postListResponse = await axios.get(
-        `http://localhost:8080/posts/best`,
+        "/posts/best",
         {
           params: {
             name: category

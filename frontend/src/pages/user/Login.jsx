@@ -37,7 +37,7 @@ export default function Login() {
         const token = urlParams.get('token');
 
         if(token) {
-            axios.post('/jwt-decode', {token})
+            axios.post("/jwt-decode", {token})
                 .then(response => {
                     const userId = response.data.userId;
                     setUserId(userId);
@@ -51,7 +51,7 @@ export default function Login() {
     },[]);
 
     const handleKakaoLogin = () => {
-        axios.get("http://localhost:8080/kakaologin/location")
+        axios.get("/kakaologin/location")
             .then(response => {
                 const kLocation = response.data;
                 setKakaoLocation(kLocation);

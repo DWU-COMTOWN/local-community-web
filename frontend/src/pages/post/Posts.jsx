@@ -23,7 +23,7 @@ export default function Posts() {
   const fetchPosts = async (page) => {
     try {
       const postListResponse = await axios.get(
-        `http://localhost:8080/posts`,
+        "/posts",
         {
           params: {
             categoryId: categoryId,

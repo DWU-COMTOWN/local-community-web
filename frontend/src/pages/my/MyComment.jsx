@@ -21,7 +21,7 @@ export default function MyComment() {
         const fetchCommentedPosts = async () => {
             try {
                 // 서버로 현재 페이지와 페이지 크기 전달
-                const response = await axios.get('/mypage/comments', {
+                const response = await axios.get("/mypage/comments", {
                     params: { page: page - 1, size: rpp }, // Spring에서는 페이지가 0부터 시작
                     withCredentials: true, // JWT 쿠키 포함
                 });
