@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import "../../css/Main.css";
 import styled from "styled-components";
 
+// 기본 프로필 이미지 URL
+const DEFAULT_PROFILE_IMAGE = "https://i.ibb.co/4dymRPK/image.png";
+
+// Wrapper 스타일
 const Wrapper = styled.div`
     height: 750px;
     width: 200px;
@@ -14,6 +17,7 @@ const Wrapper = styled.div`
     align-items: center;
 `;
 
+// 사용자 정보 래퍼
 const UserInfoWrapper = styled.div`
     text-align: center;
     display: flex;
@@ -22,6 +26,7 @@ const UserInfoWrapper = styled.div`
     gap: 5px;
 `;
 
+// 프로필 이미지
 const UserImage = styled.img`
     border-radius: 50%;
     width: 100px;
@@ -29,10 +34,12 @@ const UserImage = styled.img`
     margin-bottom: 10px;
 `;
 
+// 사용자 ID 스타일
 const UserIdWrapper = styled.p`
     margin-bottom: 30px;
 `;
 
+// 메뉴 링크 스타일
 const MenuLinksWrapper = styled.div`
     margin-top: 40px; /* 로그아웃 버튼과 메뉴 항목 간의 간격 */
     display: flex;
@@ -46,7 +53,7 @@ const MenuLink = styled(Link)`
     font-size: 14px;
     text-align: center;
     padding: 8px;
-    width: 160px; /* 항목의 가로 길이 */
+    width: 160px;
     border-radius: 5px;
     background-color: #ffffff;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -56,6 +63,7 @@ const MenuLink = styled(Link)`
     }
 `;
 
+// 버튼 컨테이너
 const ButtonWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -64,6 +72,7 @@ const ButtonWrapper = styled.div`
     margin-top: 50px;
 `;
 
+// 기본 버튼 스타일
 const Button = styled.button`
     padding: 8px 10px;
     cursor: pointer;
@@ -74,14 +83,27 @@ const Button = styled.button`
     font-size: 14px;
     width: 140px;
     text-align: center;
+
     &:hover {
         background-color: #0056b3;
     }
 `;
 
-const DEFAULT_PROFILE_IMAGE = "https://i.ibb.co/4dymRPK/image.png";
+// 카카오 버튼 스타일
+const KakaoButton = styled(Button)`
+    background-color: #fee500; /* 카카오 고유 색상 */
+    color: #000; /* 검은색 텍스트 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
 
-function LeftMenu() {
+    &:hover {
+        background-color: #ffcc00;
+    }
+`;
+
+const LeftMenu = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
@@ -122,6 +144,19 @@ function LeftMenu() {
             });
     };
 
+    const handleKakaoLogin = () => {
+        axios.get("/kakaologin/location").then((response) => {
+            const kakaoLoginUrl = response.data;
+            if (kakaoLoginUrl) {
+                window.location.href = kakaoLoginUrl;
+            }
+        });
+    };
+
+    const handleKakaoSignUp = () => {
+        navigate("/jwt-login/join/kakao");
+    };
+
     return (
         <Wrapper>
             {isLoggedIn ? (
@@ -144,12 +179,24 @@ function LeftMenu() {
                 )
             ) : (
                 <ButtonWrapper>
-                    <Button onClick={() => navigate("/jwt-login/login")}>로그인</Button>
-                    <Button onClick={() => navigate("/jwt-login/join")}>회원가입</Button>
+                    <Button onClick={() => navigate("/jwt-login/login")}>
+                        로그인
+                    </Button>
+                    <Button onClick={() => navigate("/jwt-login/join")}>
+                        회원가입
+                    </Button>
+                    <KakaoButton onClick={handleKakaoLogin}>
+                        <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Kakao_logo.jpg"
+                            alt="카카오 로고"
+                            style={{ width: "30px", height: "30px", borderRadius: "10%" }}
+                        />
+                        간편 로그인 및 회원가입
+                    </KakaoButton>
                 </ButtonWrapper>
             )}
         </Wrapper>
     );
-}
+};
 
 export default LeftMenu;
