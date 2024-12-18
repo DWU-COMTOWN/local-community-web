@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../css/SignUp.css";
 import Postcode from "../../components/user/PostCode";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function SignUp() {
 
@@ -244,7 +245,7 @@ export default function SignUp() {
 
   const handleCheckId = async () => {
     try {
-      const response = await axios.get("/jwt-login/check-id", {
+      const response = await axiosInstance.get("/jwt-login/check-id", {
         params: {userId: formValue.id}
       });
       const {success, message} = response.data;
@@ -261,7 +262,7 @@ export default function SignUp() {
 
   const handleCheckNickname = async () => {
     try {
-      const response = await axios.get("/jwt-login/check-nickname", {
+      const response = await axiosInstance.get("/jwt-login/check-nickname", {
         params: {nickname: formValue.nickname}
       });
 
@@ -293,7 +294,7 @@ export default function SignUp() {
     console.log(signUpData);
 
     try {
-      const response = await axios.post("/jwt-login/join", signUpData, {
+      const response = await axiosInstance.post("/jwt-login/join", signUpData, {
         headers: {
           Authorization: `Bearer ${token}`, // 토큰을 헤더로 전송
         },

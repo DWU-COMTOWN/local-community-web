@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import  "../../css/Comment.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function CommentItem({ item, postId, postWriter }) {
   const [replyContent, setReplyContent] = useState("");
@@ -25,7 +26,7 @@ export default function CommentItem({ item, postId, postWriter }) {
 
   const deleteComment = (commentId) => {
     if (window.confirm("이 댓글을 삭제하시겠습니까?")) {
-      axios
+      axiosInstance
         .delete(`/comment/${commentId}`, {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         })
@@ -51,7 +52,7 @@ export default function CommentItem({ item, postId, postWriter }) {
   
 
   const editComment = (commentId) => {
-    axios
+    axiosInstance
       .put(`/comment/${commentId}`, {
         content: editedContents[commentId],
         isEdited: true,
@@ -73,7 +74,7 @@ export default function CommentItem({ item, postId, postWriter }) {
       return;
     }
 
-    axios
+    axiosInstance
       .post("/comment/create", {
         postId: postId,
         content: replyContent,
@@ -94,7 +95,7 @@ export default function CommentItem({ item, postId, postWriter }) {
     event.preventDefault();
   
     try {
-      const response = await axios.get(`/comment/${commentId}/isLiked`, {
+      const response = await axiosInstance.get(`/comment/${commentId}/isLiked`, {
         withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
       });
   
@@ -105,7 +106,7 @@ export default function CommentItem({ item, postId, postWriter }) {
       }
   
       if (window.confirm("이 글을 추천하시겠습니까?")) {
-        await axios.post(`/comment/${commentId}/like`, {}, {
+        await axiosInstance.post(`/comment/${commentId}/like`, {}, {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         });
         window.location.reload();

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled from "styled-components"
+import axiosInstance from "../../api/axiosInstance";
 
 // 기본 프로필 이미지 URL
 const DEFAULT_PROFILE_IMAGE = "https://i.ibb.co/4dymRPK/image.png";
@@ -114,7 +115,7 @@ const LeftMenu = () => {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await axios.get("/mypage/user", {
+            const response = await axiosInstance.get("/mypage/user", {
                 withCredentials: true,
             });
             setUserInfo({
@@ -131,8 +132,7 @@ const LeftMenu = () => {
     };
 
     const handleLogout = () => {
-        axios
-            .post("/jwt-login/logout", {}, { withCredentials: true })
+        axiosInstance.post("/jwt-login/logout", {}, { withCredentials: true })
             .then(() => {
                 setIsLoggedIn(false);
                 setUserInfo(null);
@@ -145,7 +145,8 @@ const LeftMenu = () => {
     };
 
     const handleKakaoLogin = () => {
-        axios.get("/kakaologin/location").then((response) => {
+        axiosInstance
+            .get("/kakaologin/location").then((response) => {
             const kakaoLoginUrl = response.data;
             if (kakaoLoginUrl) {
                 window.location.href = kakaoLoginUrl;

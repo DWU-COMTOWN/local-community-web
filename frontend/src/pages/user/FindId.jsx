@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import "../../css/FindId.css";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function FindId() {
     const [email, setEmail] = useState("");
@@ -25,7 +26,7 @@ export default function FindId() {
 
     const handleCheckEmail = async () => {
         try{
-            const response = await axios.get("/jwt-login/exist-email", {
+            const response = await axiosInstance.get("/jwt-login/exist-email", {
                 params: {email: email}
             });
 
@@ -37,7 +38,7 @@ export default function FindId() {
 
             if(success) {
                 try {
-                    const sendResponse = await axios.post("/jwt-login/id-email", {
+                    const sendResponse = await axiosInstance.post("/jwt-login/id-email", {
                         email: email
                     });
                     console.log("이메일 전송 요청 성공: ", sendResponse);
@@ -55,7 +56,7 @@ export default function FindId() {
 
     const handleVerifyCode = async () => {
         try {
-            const response = await axios.post("/jwt-login/verify-code", {
+            const response = await axiosInstance.post("/jwt-login/verify-code", {
                 email: email,
                 code: authNum
             });
@@ -69,7 +70,7 @@ export default function FindId() {
 
             if(success) {
                 try {
-                    const response2 = await axios.get("/jwt-login/find-id", {
+                    const response2 = await axiosInstance.get("/jwt-login/find-id", {
                         params: {email: email}
                     });
                     console.log("아이디 가져오기 요청 성공");

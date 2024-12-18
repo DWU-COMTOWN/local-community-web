@@ -5,6 +5,7 @@ import "../../css/MyPage.css";
 import Header from "../../components/my/Header";
 import Sidebar from "../../components/my/Sidebar";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function MyPost() {
   const [nickname, setNickname] = useState("");
@@ -20,7 +21,7 @@ export default function MyPost() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.get("/mypage/user", {
+        const response = await axiosInstance.get("/mypage/user", {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         });
         setUserInfo(response.data);
@@ -86,7 +87,7 @@ export default function MyPost() {
             console.log(key, value);
           });
 
-          const imageResponse = await axios.put(
+          const imageResponse = await axiosInstance.put(
               "/mypage/user/profile-image",
               formData,
               {
@@ -102,7 +103,7 @@ export default function MyPost() {
         }
 
         // 사용자 정보 업데이트 요청
-        await axios.put(
+        await axiosInstance.put(
             "/mypage/user",
             {
               nickname,

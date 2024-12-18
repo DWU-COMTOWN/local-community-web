@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import PostItem from "../../components/post/PostItem";
 import "../../css/Posts.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function BestPosts() {
   const location = useLocation();
@@ -11,7 +12,7 @@ export default function BestPosts() {
 
   const fetchPosts = async () => {
     try {
-      const postListResponse = await axios.get(
+      const postListResponse = await axiosInstance.get(
         "/posts/best",
         {
           params: {

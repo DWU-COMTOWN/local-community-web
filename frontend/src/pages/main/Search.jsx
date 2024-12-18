@@ -4,6 +4,7 @@ import PostItem from "../../components/post/PostItem";
 import "../../css/Posts.css";
 import Pagination from "react-js-pagination";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Search() {
   const location = useLocation();
@@ -17,7 +18,7 @@ export default function Search() {
 
   const fetchPosts = async (page) => {
     try {
-      const postListResponse = await axios.get(
+      const postListResponse = await axiosInstance.get(
         "/posts",
         {
           params: {

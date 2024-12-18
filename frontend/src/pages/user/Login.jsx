@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import "../../css/Login.css";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Login() {
     const [id, setId] = useState("");
@@ -37,7 +38,7 @@ export default function Login() {
         const token = urlParams.get('token');
 
         if(token) {
-            axios.post("/jwt-decode", {token})
+            axiosInstance.post("/jwt-decode", {token})
                 .then(response => {
                     const userId = response.data.userId;
                     setUserId(userId);
@@ -51,7 +52,7 @@ export default function Login() {
     },[]);
 
     const handleKakaoLogin = () => {
-        axios.get("/kakaologin/location")
+        axiosInstance.get("/kakaologin/location")
             .then(response => {
                 const kLocation = response.data;
                 setKakaoLocation(kLocation);
@@ -67,7 +68,7 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("/jwt-login/login", {
+            const response = await axiosInstance.post("/jwt-login/login", {
                 userId: id,
                 password: pw,
             });

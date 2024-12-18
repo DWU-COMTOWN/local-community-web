@@ -5,6 +5,7 @@ import Pagination from "react-js-pagination";
 import Header from "../../components/my/Header";
 import Sidebar from "../../components/my/Sidebar";
 import '../../css/MyPage.css';
+import axiosInstance from "../../api/axiosInstance";
 
 export default function MyPost() {
     const [currentPost, setCurrentPost] = useState([]);
@@ -20,7 +21,7 @@ export default function MyPost() {
         const fetchPosts = async () => {
             try {
                 // 서버로 현재 페이지와 페이지 크기 전달
-                const response = await axios.get("/mypage/posts", {
+                const response = await axiosInstance.get("/mypage/posts", {
                     params: { page: page - 1, size: rpp }, // Spring에서는 0부터 시작
                     withCredentials: true, // JWT 쿠키 포함
                 });

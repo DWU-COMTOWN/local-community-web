@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import "../../css/FindId.css";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function FindPw() {
     const [id, setId] = useState("");
@@ -29,7 +30,7 @@ export default function FindPw() {
 
     const handleCheckId = async () => {
         try {
-            const response = await axios.get("/jwt-login/exist-id", {
+            const response = await axiosInstance.get("/jwt-login/exist-id", {
                 params: {id: id}
             });
 
@@ -40,7 +41,7 @@ export default function FindPw() {
             onAlert(message);
 
             try {
-                const response2 = await axios.post("/jwt-login/get-email", {
+                const response2 = await axiosInstance.post("/jwt-login/get-email", {
                     id: id
                 });
 
@@ -49,7 +50,7 @@ export default function FindPw() {
 
                 if(success) {
                     try {
-                        const sendResponse = await axios.post("/jwt-login/pw-email", {
+                        const sendResponse = await axiosInstance.post("/jwt-login/pw-email", {
                             email: email
                         });
                         console.log("이메일 전송 요청 성공: ", sendResponse);
@@ -70,7 +71,7 @@ export default function FindPw() {
 
     const handleCheckEmail = async () => {
         try{
-            const response = await axios.get("/jwt-login/exist-email", {
+            const response = await axiosInstance.get("/jwt-login/exist-email", {
                 params: {email: email}
             });
 
@@ -82,7 +83,7 @@ export default function FindPw() {
 
             if(success) {
                 try {
-                    const sendResponse = await axios.post("/jwt-login/pw-email", {
+                    const sendResponse = await axiosInstance.post("/jwt-login/pw-email", {
                         email: email
                     });
                     console.log("이메일 전송 요청 성공: ", sendResponse);

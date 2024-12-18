@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/Write.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Write() {
   const location = useLocation();
@@ -87,7 +88,7 @@ export default function Write() {
     });
 
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         "/post/create",
         formData, // formData를 본문으로 전송
         {
