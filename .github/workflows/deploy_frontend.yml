@@ -7,7 +7,7 @@ on:
       - feat/deploy/#32
 
 jobs:
-  Deploy_Frontend_to_EC2:
+  Deploy_Frontend_to_S3:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,21 @@ jobs:
           script: |
             # 작업 디렉토리로 이동
             cd /home/ubuntu/local-community-web/frontend
-            
-            # 항상 원격 dev 브랜치를 기준으로 동기화
+
+            # dev 브랜치의 최신 코드 가져오기
             git fetch origin
-            git reset --hard origin/dev
+            git checkout dev
+            git pull origin dev
+
+            # feat/deploy/#32 브랜치의 변경 사항 병합
+            git fetch origin feat/deploy/#32
+            git cherry-pick origin/feat/deploy/#32
+
+            # 충돌이 발생하면 자동 병합 및 지속
+            if [ $? -ne 0 ]; then
+              echo "Conflict detected during cherry-pick. Resolving conflicts..."
+              git cherry-pick --continue
+            fi
 
             # 의존성 설치
             npm install
@@ -37,3 +48,6 @@ jobs:
 
             # S3로 빌드 결과물 동기화
             aws s3 sync build/ s3://town-in-web-page --region ap-northeast-2 --delete
+
+            # 배포 확인 메시지 출력
+            echo "Frontend has been deployed with changes from feat/deploy/#32 branch."
