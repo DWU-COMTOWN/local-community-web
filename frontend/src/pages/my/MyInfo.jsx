@@ -87,7 +87,7 @@ export default function MyPost() {
           });
 
           const imageResponse = await axios.put(
-              `/mypage/user/profile-image`,
+              "/mypage/user/profile-image",
               formData,
               {
                 withCredentials: true,
@@ -103,7 +103,7 @@ export default function MyPost() {
 
         // 사용자 정보 업데이트 요청
         await axios.put(
-            `/mypage/user`,
+            "/mypage/user",
             {
               nickname,
               phone: phoneNum,

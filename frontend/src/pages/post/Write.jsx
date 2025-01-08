@@ -88,7 +88,7 @@ export default function Write() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/post/create",
+        "/post/create",
         formData, // formData를 본문으로 전송
         {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄

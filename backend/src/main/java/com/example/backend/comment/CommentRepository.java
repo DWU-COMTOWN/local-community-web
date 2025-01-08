@@ -15,9 +15,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPostIdAndParentCommentIsNull(Long postId);
     List<Comment> findByParentCommentId(Long parentCommentId);
     List<Comment> findByPostId(Long postId);
-    List<Comment> findByUser(User user);
-    List<Comment> findByUserId(Long userId);
+
     Page<Comment> findByUser(User user, Pageable pageable);
+    List<Comment> findByUser(User user);
+    long countByUser(User user);
+
     @Modifying
     @Query("UPDATE Comment c SET c.user = :deletedUser WHERE c.user.id = :userId")
     void updateCommentsToDeletedUser(@Param("userId") Long userId, @Param("deletedUser") User deletedUser);
