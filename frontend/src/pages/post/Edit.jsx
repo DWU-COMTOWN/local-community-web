@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/Write.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Edit() {
   const location = useLocation();
@@ -88,8 +89,8 @@ export default function Edit() {
     });
 
     try {
-      const response = await axios.put(
-        `http://localhost:8080/post/${postId}`,
+      const response = await axiosInstance.put(
+        `/post/${postId}`,
         formData,
         {
           withCredentials: true,

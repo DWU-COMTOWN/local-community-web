@@ -13,6 +13,11 @@ const ContentWrapper = styled.div`
     margin-top: 1%;
 `;
 
+const StyledHr = styled.hr`
+    margin: 8px 0; /* 위아래 간격 */
+    border: 1px solid #ccc; /* 선 스타일 */
+`;
+
 function MainPage(props) {
     const {} = props;
 
@@ -21,8 +26,9 @@ function MainPage(props) {
     return (
         <>
             <MainTitle />
-            <hr/>
+            <StyledHr />
             <MainMenu />
+            <StyledHr />
             <ContentWrapper>
                 <LeftMenu />
                 <MainBoard />

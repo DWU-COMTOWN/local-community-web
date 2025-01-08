@@ -14,13 +14,12 @@ import java.util.Optional;
 
 public interface PostScrapRepository extends JpaRepository<PostScrap, Long> {
     List<PostScrap> findByPostId(Long postId);
-
     Optional<PostScrap> findByUserIdAndPostId(Long userId, Long postId);
     @Transactional
     void deleteByUserIdAndPostId(Long userId, Long postId);
-    List<PostScrap> findByUser(User user);
-    Page<PostScrap> findByUser(User user, Pageable pageable);
 
+    Page<PostScrap> findByUser(User user, Pageable pageable);
+    long countByUser(User user);
     @Modifying
     @Query("UPDATE PostScrap p SET p.user = :deletedUser WHERE p.user.id = :userId")
     void updatePostScrapToDeletedUser(@Param("userId") Long userId, @Param("deletedUser") User deletedUser);

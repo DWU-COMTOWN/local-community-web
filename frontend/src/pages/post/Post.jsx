@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../../css/Post.css";
 import axios from "axios";
 import CommentItem from "../../components/post/CommentItem";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Post() {
   const { postId } = useParams(); // useParams 훅을 사용하여 postId 가져오기
@@ -16,7 +17,7 @@ export default function Post() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const postResponse = await axios.get(`http://localhost:8080/post/${postId}`, {
+        const postResponse = await axiosInstance.get(`/post/${postId}`, {
           withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
         });
         const postData = postResponse.data;
@@ -24,7 +25,7 @@ export default function Post() {
         setCategoryId(postData.categoryId);
 
         if (postData && postData.categoryId) {
-          const categoryResponse = await axios.get(`http://localhost:8080/category/${postData.categoryId}`, {
+          const categoryResponse = await axiosInstance.get(`/${postData.categoryId}`, {
             withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
           });
           setCategory(categoryResponse.data);
@@ -53,7 +54,7 @@ export default function Post() {
 
     if (window.confirm("이 글을 추천하시겠습니까?")) {
       try {
-        await axios.post(`http://localhost:8080/post/${postId}/like`, {}, {
+        await axiosInstance.post(`/post/${postId}/like`, {}, {
           withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
         });
         window.location.reload();
@@ -79,7 +80,7 @@ export default function Post() {
         : `http://localhost:8080/post/${postId}/scrap`;
 
       try {
-        await axios.post(endpoint, {}, {
+        await axiosInstance.post(endpoint, {}, {
           withCredentials: true
         });
 
@@ -92,8 +93,8 @@ export default function Post() {
 
   const createComment = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/comment/create",
+      const response = await axiosInstance.post(
+        "/comment/create",
         {
           postId: postId,
           content: commentInput,
@@ -125,8 +126,8 @@ export default function Post() {
   const deletePost = (e) => {
     e.preventDefault();
     if (window.confirm("이 글을 삭제하시겠습니까?")) {
-      axios
-        .delete(`http://localhost:8080/post/${postId}`, {
+      axiosInstance
+        .delete(`/post/${postId}`, {
           withCredentials: true // 쿠키를 포함하여 서버로 요청을 보냄
         })
         .then((response) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from 'react-router-dom';
 import "../../css/ChangePw.css";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function ChangePw() {
 
@@ -53,7 +54,7 @@ export default function ChangePw() {
     const onSubmit = async () => {
         if(pw === checkPw) {
             try {
-                await axios.post(`http://localhost:8080/jwt-login/change-pw?token=${token}`, { newPassword: pw });
+                await axiosInstance.post(`/jwt-login/change-pw?token=${token}`, { newPassword: pw });
                 alert("비밀번호가 성공적으로 변경되었습니다.");
                 window.location.href = "/jwt-login/login"
             } catch(error) {
