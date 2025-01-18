@@ -68,7 +68,7 @@ jobs:
 
             # 카카오 API 설정
             kakao.client_id=$KAKAO_CLIENT_ID
-            kakao.redirect_uri=https://api.townin.site/callback
+            kakao.redirect_uri=https://api.townin.site/api/callback
             kakao.admin.key=$KAKAO_ADMIN_KEY
 
             # AWS S3 설정

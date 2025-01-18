@@ -128,7 +128,21 @@ public class MyPageService {
         return userDto;
     }
 
-
+    public PostDto getPostById(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + id));
+        return new PostDto(
+                post.getId(),
+                post.getTitle(),
+                post.getContent(),
+                post.getCreatedDate(),
+                post.getModifiedDate(),
+                post.getUser().getUsername(),
+                post.getLikeCount(),
+                post.getComments().size(),
+                post.getCategory().getName()
+        );
+    }
 
 
     // 본인이 작성한 글 불러오기 (페이징 추가)
@@ -175,7 +189,7 @@ public class MyPageService {
 
         return postRepository.countByUser(user);
     }
-    //본인이 작성한 댓글 불러오기
+
 
     // 본인이 댓글을 단 게시글 가져오기
     public List<PostDto> getCommentedPostsByUserId(String userId, int page, int size) {

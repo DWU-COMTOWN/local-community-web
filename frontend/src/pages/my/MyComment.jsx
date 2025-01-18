@@ -6,6 +6,8 @@ import Sidebar from "../../components/my/Sidebar";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
+
 
 export default function MyComment() {
     const [commentedPosts, setCommentedPosts] = useState([]);
@@ -13,6 +15,7 @@ export default function MyComment() {
     const rpp = 5; // 한 페이지에 보여줄 댓글 수
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0); // 전체 댓글 수
+    const navigate = useNavigate();
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
@@ -39,6 +42,13 @@ export default function MyComment() {
         fetchCommentedPosts();
     }, [page]); // 페이지 번호가 변경될 때마다 실행
 
+
+    const handlePostClick = (post) => {
+        navigate(`/post/${post.id}`, {
+            state: post, // Pass post data to Post.jsx
+        });
+    };
+
     return (
         <>
             <div className="root-wrap">
@@ -53,7 +63,7 @@ export default function MyComment() {
                 <div>
                     {commentedPosts.length > 0 ? (
                         commentedPosts.map(post => (
-                            <Box key={post.id}>
+                            <Box key={post.id} onClick={() => handlePostClick(post)}>
                                 <Board>{post.title}</Board>
                                 <Content>{post.content}</Content>
                                 <Bottom>

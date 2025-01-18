@@ -120,7 +120,7 @@ export default function CommentItem({ item, postId, postWriter }) {
   return (
     <div className="comment_parent">
       <div className="commentInfo">
-        <img src="https://cf-fpi.everytime.kr/0.png" />
+        <img src={item.profile_url} />
         <div className="comment__nickname">
           {item.nickname}
           {postWriter === item.userId && <span>(글쓴이)</span>} {/* userId와 loginId가 같으면 "(글쓴이)" 표시 */}
@@ -198,7 +198,7 @@ export default function CommentItem({ item, postId, postWriter }) {
       {item.children && item.children.map((child) => (
     <div key={child.commentId} className="reply">
       <div className="commentInfo">
-        <img src="https://cf-fpi.everytime.kr/0.png" alt="User"/>
+        <img src={child.profile_url} />
         <div className="comment__nickname">
           {child.nickname}
           {postWriter === child.userId && <span>(글쓴이)</span>}

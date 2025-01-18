@@ -88,6 +88,15 @@ public class MyPageController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
+    }
+
     @GetMapping("/comments")
     public ResponseEntity<Map<String, Object>> getCommentedPostsByUserId(
             HttpServletRequest request,
@@ -106,6 +115,15 @@ public class MyPageController {
         response.put("totalItems", totalItems);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<PostDto> getCommentedPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/scraps")
@@ -127,6 +145,15 @@ public class MyPageController {
         response.put("totalItems", totalItems);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/scraps/{id}")
+    public ResponseEntity<PostDto> getScrappedPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
     }
 
     @PutMapping("/user")

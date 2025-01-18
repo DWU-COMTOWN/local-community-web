@@ -5,6 +5,7 @@ import Sidebar from "../../components/my/Sidebar";
 import axios from 'axios';
 import Pagination from "react-js-pagination";
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export default function Bookmark() {
     const [scrappedPosts, setScrappedPosts] = useState([]);
@@ -12,6 +13,7 @@ export default function Bookmark() {
     const rpp = 5; // 한 페이지에 보여줄 글 수
     const [page, setPage] = useState(1); // 현재 페이지
     const [totalItems, setTotalItems] = useState(0); // 전체 글 수
+    const navigate = useNavigate();
 
     const handlePageChange = (newPage) => {
         setPage(newPage);
@@ -38,6 +40,13 @@ export default function Bookmark() {
         fetchScrappedPosts();
     }, [page]); // 페이지 번호가 변경될 때마다 실행
 
+    // 스크랩 게시글 클릭 시 상세 페이지로 이동
+    const handlePostClick = (post) => {
+        navigate(`/post/${post.id}`, {
+            state: post, // 게시글 데이터를 Post.jsx로 전달
+        });
+    };
+
     return (
         <>
             <div className="root-wrap">
@@ -52,7 +61,7 @@ export default function Bookmark() {
                 <div>
                     {scrappedPosts.length > 0 ? (
                         scrappedPosts.map(post => (
-                            <Box key={post.id}>
+                            <Box key={post.id} onClick={() => handlePostClick(post)}>
                                 <Board>{post.title}</Board>
                                 <Content>{post.content}</Content>
                                 <Bottom>

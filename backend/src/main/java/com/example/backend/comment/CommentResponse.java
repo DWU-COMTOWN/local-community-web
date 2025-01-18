@@ -28,8 +28,9 @@ public class CommentResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime  modifiedDate;
     private Long loginId;
+    private String profile_url;
 
-    public CommentResponse(Long commentId, Long userId, Long postId, Long parentId, List<CommentResponse> children, String nickname, String content, int likeCount, boolean isDeleted, boolean isEdited, LocalDateTime createdDate, LocalDateTime modifiedDate, Long loginId) {
+    public CommentResponse(Long commentId, Long userId, Long postId, Long parentId, List<CommentResponse> children, String nickname, String content, int likeCount, boolean isDeleted, boolean isEdited, LocalDateTime createdDate, LocalDateTime modifiedDate, Long loginId, String profile_url) {
         this.commentId = commentId;
         this.userId = userId;
         this.postId = postId;
@@ -43,6 +44,7 @@ public class CommentResponse {
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.loginId = loginId;
+        this.profile_url = profile_url;
     }
 
     public static CommentResponse toDto(Comment comment, List<CommentResponse> children, Long loginId) {
@@ -59,7 +61,8 @@ public class CommentResponse {
                 comment.isEdited(),
                 comment.getCreatedDate(),
                 comment.getModifiedDate(),
-                loginId
+                loginId,
+                comment.getUser().getProfile_url()
         );
     }
 }

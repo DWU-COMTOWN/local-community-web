@@ -6,6 +6,7 @@ import Header from "../../components/my/Header";
 import Sidebar from "../../components/my/Sidebar";
 import '../../css/MyPage.css';
 import axiosInstance from "../../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 export default function MyPost() {
     const [currentPost, setCurrentPost] = useState([]);
@@ -13,6 +14,7 @@ export default function MyPost() {
     const rpp = 5; //한페이지에 5개씩
     const [page, setPage] = useState(1); //현재페이지
     const [totalItems, setTotalItems] = useState(0); // 전체 게시물 수
+    const navigate = useNavigate();
 
     const handlePageChange = (page) => {
         setPage(page);
@@ -37,6 +39,11 @@ export default function MyPost() {
         fetchPosts();
     }, [page]); // 페이지 번호가 변경될 때마다 실행
 
+    const handlePostClick = (post) => {
+        navigate(`/post/${post.id}`, {
+            state: post, // Pass post data to Post.jsx
+        });
+    };
 
     return (
         <>
@@ -52,12 +59,12 @@ export default function MyPost() {
                 <div>
                     {currentPost.length > 0 ? (
                         currentPost.map((data) => (
-                            <Box key={data.id}>
+                            <Box key={data.id} onClick={() => handlePostClick(data)}>
                                 <Board>{data.title}</Board>
                                 <Content>{data.content}</Content>
                                 <Bottom>
                                     <Date>
-                                        {`${data.createdDate[0]}-${data.createdDate[1]}-${data.createdDate[2]} | ${data.userName ||'작성자 없음'}`}
+                                        {`${data.createdDate[0]}-${data.createdDate[1]}-${data.createdDate[2]} | ${data.userName ||'본인작성'}`}
                                     </Date>
                                     <LikeComment>
                                         {"좋아요 " + (data.likesCount || 0)}
