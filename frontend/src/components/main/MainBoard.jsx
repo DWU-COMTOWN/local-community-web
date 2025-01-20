@@ -180,7 +180,7 @@ function MainBoard(props) {
                             <table border="1" className="table1">
                                 <tbody>
                                     <tr>
-                                        <td className="tabletitle table-style" onClick={() => handleClick(15, "분실")}>분실 게시판</td>
+                                        <td className="tabletitle table-style" onClick={() => handleClick(15, "피드백")}>피드백 게시판</td>
                                     </tr>
                                     <tr>
                                         <td

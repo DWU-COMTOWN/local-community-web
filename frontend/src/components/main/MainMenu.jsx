@@ -142,8 +142,8 @@ function MainMenu() {
                 <MenuItem>
                     HELP
                     <SubMenu>
-                        <SubMenuItem onClick={() => handleClick(15, "분실")}>
-                            분실
+                        <SubMenuItem onClick={() => handleClick(15, "피드백")}>
+                            피드백
                         </SubMenuItem>
                         <SubMenuItem onClick={() => handleClick(16, "실종")}>
                             실종
