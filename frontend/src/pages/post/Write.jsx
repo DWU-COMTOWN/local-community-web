@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/Write.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function Write() {
   const location = useLocation();
@@ -87,8 +88,8 @@ export default function Write() {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/post/create",
+      const response = await axiosInstance.post(
+        "/post/create",
         formData, // formData를 본문으로 전송
         {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄

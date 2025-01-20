@@ -7,6 +7,7 @@ import Header from "../../components/my/Header"
 import Sidebar from "../../components/my/Sidebar"
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function DeleteAcc() {
 
@@ -16,7 +17,7 @@ export default function DeleteAcc() {
     useEffect(() => {
         const getUserInfo = async () => {
             try {
-                const response = await axios.get("/mypage/user", {
+                const response = await axiosInstance.get("/mypage/user", {
                     withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
                 });
                 setUserInfo(response.data);
@@ -54,7 +55,7 @@ export default function DeleteAcc() {
 
         if (window.confirm("탈퇴하시겠습니까?")) {
             try {
-                await axios.delete("/jwt-login/withdraw", {
+                await axiosInstance.delete("/jwt-login/withdraw", {
                     params: {userId}
                 });
                 alert("탈퇴되었습니다.");

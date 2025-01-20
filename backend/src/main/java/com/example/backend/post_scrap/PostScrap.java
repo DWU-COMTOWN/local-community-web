@@ -9,6 +9,9 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,6 +27,8 @@ public class PostScrap {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+    @Column(nullable = false)
+    private LocalDateTime createdDate = LocalDateTime.now();
 
     public PostScrap(User user, Post post) {
         this.user = user;

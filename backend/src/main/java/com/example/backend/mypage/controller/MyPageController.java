@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,12 +36,14 @@ public class MyPageController {
         if (jwtCookie.isPresent()) {
             String token = jwtCookie.get().getValue();
             System.out.println("JWT Token: " + token); // 토큰이 제대로 넘어오는지 확인
-            return JwtTokenUtil.getuserId(token); // userId를 String으로 반환
-        } else {
-            throw new IllegalArgumentException("JWT 토큰이 없습니다.");
+            if (JwtTokenUtil.validateToken(token)) {
+                return JwtTokenUtil.getuserId(token); // userId를 String으로 반환
+            } else {
+                return null; // 유효하지 않은 토큰
+            }
         }
+        return null; // JWT 토큰이 없는 경우
     }
-
 
     // 쿠키 배열에서 JWT 토큰 쿠키를 찾아 반환하는 메서드
     private Optional<Cookie> getJwtTokenFromCookies(Cookie[] cookies) {
@@ -53,50 +57,121 @@ public class MyPageController {
     }
 
     @GetMapping("/user")
-    public UserDto getUserInfo(HttpServletRequest request) {
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
         String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.getUserById(userId);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT 토큰이 없습니다.");
+        }
+        UserDto user = myPageService.getUserById(userId);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+        }
+        return ResponseEntity.ok(user);
     }
 
-//    @GetMapping("/posts")
-//    public List<PostDto> getPostsByUserId(HttpServletRequest request) {
-//        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-//        return myPageService.getPostsByUserId(userId);
-//    }
-
     @GetMapping("/posts")
-    public List<PostDto> getPostsByUserId(HttpServletRequest request,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "3") int size) {
-    String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-    return myPageService.getPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request); // 요청에서 쿠키로 userId 추출
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        List<PostDto> posts = myPageService.getPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getPostCountByUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/comments")
-    public List<PostDto> getCommentedPostsByUserId(HttpServletRequest request,
-                                                   @RequestParam(defaultValue = "0") int page,
-                                                   @RequestParam(defaultValue = "3") int size) {
-        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.getCommentedPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getCommentedPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // 댓글 게시글 페이징 처리
+        List<PostDto> posts = myPageService.getCommentedPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getCommentedPostCountByUser(userId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", posts);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/comments/{id}")
+    public ResponseEntity<PostDto> getCommentedPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
     }
 
     @GetMapping("/scraps")
-    public List<PostScrapDto> getScrappedPostsByUserId(HttpServletRequest request,
-                                                       @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "3") int size) {
-        String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.getScrappedPostsByUserId(userId, page, size);
+    public ResponseEntity<Map<String, Object>> getScrappedPostsByUserId(
+            HttpServletRequest request,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        String userId = getUserIdFromCookie(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        // 스크랩한 게시글 페이징 처리
+        List<PostScrapDto> scraps = myPageService.getScrappedPostsByUserId(userId, page, size);
+        long totalItems = myPageService.getScrappedPostCountByUser(userId);
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("posts", scraps);
+        response.put("totalItems", totalItems);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/scraps/{id}")
+    public ResponseEntity<PostDto> getScrappedPostById(@PathVariable Long id) {
+        PostDto post = myPageService.getPostById(id);
+        if (post == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(post);
     }
 
     @PutMapping("/user")
-    public UserDto updateUser(HttpServletRequest request, @RequestBody UserDto userDto) {
+    public ResponseEntity<?> updateUser(HttpServletRequest request, @RequestBody UserDto userDto) {
         String userId = getUserIdFromCookie(request); // userId를 String으로 처리
-        return myPageService.updateUser(userId, userDto);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT 토큰이 없습니다.");
+        }
+        UserDto updatedUser = myPageService.updateUser(userId, userDto);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @PutMapping("/user/profile-image")
     public ResponseEntity<String> updateProfileImage(HttpServletRequest request, @RequestPart(value = "profileImage") MultipartFile profileImage) {
         String userId = getUserIdFromCookie(request);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("JWT 토큰이 없습니다.");
+        }
         String imageUrl = myPageService.updateProfileImage(userId, profileImage);
         return new ResponseEntity<>(imageUrl, HttpStatus.OK);
     }

@@ -1,0 +1,114 @@
+name: Backend Auto Deploy to EC2
+
+on:
+  push:
+    branches:
+      - feat/deploy/#80
+
+jobs:
+  Deploy_Backend_to_EC2:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: EC2 서버에 SSH 원격 접속 후 자동 배포 작업 수행
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: false  # 에러 발생 시 스크립트를 계속 실행
+          script: |
+            set -x  # 디버깅 활성화
+
+            # GitHub Secrets를 사용하여 환경 변수 설정
+            export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+            export DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}"
+            export DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}"
+            export KAKAO_CLIENT_ID="${{ secrets.KAKAO_CLIENT_ID }}"
+            export KAKAO_ADMIN_KEY="${{ secrets.KAKAO_ADMIN_KEY }}"
+            export AWS_ACCESS_KEY="${{ secrets.AWS_ACCESS_KEY }}"
+            export AWS_SECRET_KEY="${{ secrets.AWS_SECRET_KEY }}"
+            export SPRING_MAIL_USERNAME="${{ secrets.SPRING_MAIL_USERNAME }}"
+            export SPRING_MAIL_PASSWORD="${{ secrets.SPRING_MAIL_PASSWORD }}"
+
+            # 프로젝트 디렉토리로 이동 후 Git 작업
+            cd /home/ubuntu/local-community-web
+            git config pull.rebase false
+
+            # Git 충돌 해결
+            git merge --abort || true  # 이전 충돌 상태 초기화
+            git reset --merge || true
+            git fetch origin
+            git checkout feat/deploy/#80 || git checkout -b feat/deploy/#80 origin/feat/deploy/80
+            git pull origin feat/deploy/#80 || true
+
+            # 충돌 파일 강제 덮어쓰기
+            git checkout --theirs .github/workflows/deploy_backend.yml || echo "No conflicts to resolve"
+            git add .github/workflows/deploy_backend.yml
+            git commit -m "Auto-resolve conflict for deploy_backend.yml" || echo "No changes to commit"
+            git pull origin feat/deploy/#80 --rebase || true
+
+            # backend 디렉토리로 이동
+            cd backend
+
+            # 테스트 디렉토리 제거
+            rm -rf src/main/test
+
+            # application.properties 파일 생성
+            cat > src/main/resources/application.properties <<EOF
+            spring.application.name=local-community-web
+
+            # AWS RDS 설정
+            spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+            spring.datasource.url=$DATABASE_URL
+            spring.datasource.username=$DATABASE_USERNAME
+            spring.datasource.password=$DATABASE_PASSWORD
+
+            spring.jpa.hibernate.ddl-auto=update
+
+            # 카카오 API 설정
+            kakao.client_id=$KAKAO_CLIENT_ID
+            kakao.redirect_uri=https://api.townin.site/api/callback
+            kakao.admin.key=$KAKAO_ADMIN_KEY
+
+            # AWS S3 설정
+            cloud.aws.credentials.accessKey=$AWS_ACCESS_KEY
+            cloud.aws.credentials.secretKey=$AWS_SECRET_KEY
+            cloud.aws.s3.bucket=town-in
+            cloud.aws.region.static=ap-northeast-2
+
+            # Redis 설정
+            spring.redis.host=localhost
+            spring.redis.port=6379
+
+            # HTTP 인코딩
+            spring.http.encoding.charset=UTF-8
+            spring.http.encoding.enabled=true
+            spring.http.encoding.force=true
+
+            # S3 기본 프로필 이미지 URL
+            default.profile.image.url=https://town-in.s3.ap-northeast-2.amazonaws.com/mypage/default-profile.png
+
+            # 프론트엔드 URL
+            frontend.url=https://www.townin.site
+
+            # 이메일 설정
+            spring.mail.host=smtp.naver.com
+            spring.mail.port=465
+            spring.mail.username=$SPRING_MAIL_USERNAME
+            spring.mail.password=$SPRING_MAIL_PASSWORD
+            spring.mail.properties.mail.smtp.auth=true
+            spring.mail.properties.mail.smtp.starttls.enable=true
+            spring.mail.properties.mail.smtp.starttls.required=true
+            
+            # 컨텍스트 경로 설정
+            server.servlet.context-path=/api
+            EOF
+
+            # Gradle 빌드 (테스트 제외)
+            chmod +x ./gradlew
+            ./gradlew clean build -x test
+
+            # 기존 애플리케이션 종료 및 새 애플리케이션 실행
+            sudo fuser -k -n tcp 8080 || echo "Port 8080 is not in use"
+            nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &

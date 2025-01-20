@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import  "../../css/Comment.css";
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 export default function CommentItem({ item, postId, postWriter }) {
   const [replyContent, setReplyContent] = useState("");
@@ -25,8 +26,8 @@ export default function CommentItem({ item, postId, postWriter }) {
 
   const deleteComment = (commentId) => {
     if (window.confirm("이 댓글을 삭제하시겠습니까?")) {
-      axios
-        .delete(`http://localhost:8080/comment/${commentId}`, {
+      axiosInstance
+        .delete(`/comment/${commentId}`, {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         })
         .then((response) => {
@@ -51,8 +52,8 @@ export default function CommentItem({ item, postId, postWriter }) {
   
 
   const editComment = (commentId) => {
-    axios
-      .put(`http://localhost:8080/comment/${commentId}`, {
+    axiosInstance
+      .put(`/comment/${commentId}`, {
         content: editedContents[commentId],
         isEdited: true,
       },
@@ -73,8 +74,8 @@ export default function CommentItem({ item, postId, postWriter }) {
       return;
     }
 
-    axios
-      .post("http://localhost:8080/comment/create", {
+    axiosInstance
+      .post("/comment/create", {
         postId: postId,
         content: replyContent,
         parentId: parentId,
@@ -94,7 +95,7 @@ export default function CommentItem({ item, postId, postWriter }) {
     event.preventDefault();
   
     try {
-      const response = await axios.get(`http://localhost:8080/comment/${commentId}/isLiked`, {
+      const response = await axiosInstance.get(`/comment/${commentId}/isLiked`, {
         withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
       });
   
@@ -105,7 +106,7 @@ export default function CommentItem({ item, postId, postWriter }) {
       }
   
       if (window.confirm("이 글을 추천하시겠습니까?")) {
-        await axios.post(`http://localhost:8080/comment/${commentId}/like`, {}, {
+        await axiosInstance.post(`/comment/${commentId}/like`, {}, {
           withCredentials: true, // 쿠키를 포함하여 서버로 요청을 보냄
         });
         window.location.reload();
@@ -119,7 +120,7 @@ export default function CommentItem({ item, postId, postWriter }) {
   return (
     <div className="comment_parent">
       <div className="commentInfo">
-        <img src="https://cf-fpi.everytime.kr/0.png" />
+        <img src={item.profile_url} />
         <div className="comment__nickname">
           {item.nickname}
           {postWriter === item.userId && <span>(글쓴이)</span>} {/* userId와 loginId가 같으면 "(글쓴이)" 표시 */}
@@ -197,7 +198,7 @@ export default function CommentItem({ item, postId, postWriter }) {
       {item.children && item.children.map((child) => (
     <div key={child.commentId} className="reply">
       <div className="commentInfo">
-        <img src="https://cf-fpi.everytime.kr/0.png" alt="User"/>
+        <img src={child.profile_url} />
         <div className="comment__nickname">
           {child.nickname}
           {postWriter === child.userId && <span>(글쓴이)</span>}

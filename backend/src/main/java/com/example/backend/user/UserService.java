@@ -77,6 +77,9 @@ public class UserService {
         return userRepository.existsByUserId(userId);
     }
 
+    // 닉네임 중복 체크
+    public boolean checkNicknameDuplicate(String nickname) { return userRepository.existsByNickname(nickname); }
+
     public boolean checkKakaoUserExists(String kakaoUserId) {
         return userRepository.existsByUserId(kakaoUserId);
     }
@@ -181,7 +184,7 @@ public class UserService {
     @Transactional
     public User getDeletedUserPlaceholder() {
         return userRepository.findByUserId("deleted_user")
-                .orElseGet(()-> {
+                .orElseGet(() -> {
                     User deletedUser = User.builder()
                             .userId("deleted_user")
                             .username("탈퇴한 사용자")

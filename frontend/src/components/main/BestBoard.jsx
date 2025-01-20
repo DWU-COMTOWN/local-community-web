@@ -3,6 +3,7 @@ import styled from "styled-components";
 import '../../css/Main.css';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import axiosInstance from "../../api/axiosInstance";
 
 const Wrapper = styled.div`
     height: 750px;
@@ -26,7 +27,7 @@ function BestBoard(props) {
         useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(`/category/recent-posts/best`);
+                const response = await axiosInstance.get(`/category/recent-posts/best`);
                 setBestPosts(response.data);
                 console.log(response.data);
             } catch (error) {
